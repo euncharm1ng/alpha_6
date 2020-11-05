@@ -5,9 +5,10 @@ import java.util.Scanner;
 public class board {
 	int [][]board;
 	int userTag, aiTag;
-	int turn;
+	int turn, logNum;
 	Scanner n;
 	boolean winchecker;
+	cor[] logs;
 
 	public board() {
 		this.board=new int[19][19];
@@ -15,6 +16,8 @@ public class board {
 		userTag=2;
 		winchecker=false;
 		n=new Scanner(System.in);
+		logs=new cor[361];
+		logNum=0;
 	}
 	
 	private void increaseTurn() {
@@ -105,20 +108,43 @@ public class board {
 		int x1=0, x2=0, y1=0, y2=0;
 		cor move1, move2;
 		boolean checker=false;
-				
-		do { //checker for invalid input
-			if(checker) System.out.println("wrong input! plz retry!");
-			System.out.println("input syntax: x1 y1 x2 y2!! 0~18");
-			x1=this.n.nextInt();
-			y1=this.n.nextInt();
-			x2=this.n.nextInt();
-			y2=this.n.nextInt();
+		char menu;
+		do {
+			System.out.print("press z to cancel previous move, i to input: ");	
+			menu=this.n.next().charAt(0);
 			this.n.nextLine();
-			move1=new cor(x1, y1);
-			move2=new cor(x2, y2);
-		}while(checker=(!isValidInput(move1, move2)));		
+			if(menu=='i'||menu=='I') {
+				do { //checker for invalid input
+					if(checker) System.out.println("wrong input! plz retry!");
+					System.out.println("input syntax: x1 y1 x2 y2!! 0~18:");
+					x1=this.n.nextInt();
+					y1=this.n.nextInt();
+					x2=this.n.nextInt();
+					y2=this.n.nextInt();
+					this.n.nextLine();
+					move1=new cor(x1, y1);
+					move2=new cor(x2, y2);
+				}while(checker=(!isValidInput(move1, move2)));	
+				enterInput(move1, move2);
+				log(move1);
+				log(move2);
+				System.out.println(logs[logNum-1].getX() + " "+ logs[logNum-1].getY());
+				break;
+			}else if(menu=='z'||menu=='Z') {
+				deleteMove(4);
+				printBoard();
+			}
+			else
+				System.out.print("wrong input plz retry: ");
+		}while(true);
+	}
+	public void deleteMove(int num) {
+		for(int i =0; i<num; i++) {
+			logNum--;
+			//cor tempMove=logs[logNum];
+			this.board[logs[logNum].getX()][logs[logNum].getY()]=0;
 			
-		enterInput(move1, move2);
+		}
 	}
 	
 	public boolean checkWinCondition() {//return true for no winner, false for a winner
@@ -271,6 +297,7 @@ public class board {
 		do {
 			cor center=new cor(9, 9);
 			enterInput(center, 1);
+			log(center);
 			System.out.print("plz input the number of the red stone: ");
 			numOfRed=this.n.nextInt();
 			this.n.nextLine();
@@ -294,21 +321,25 @@ public class board {
 			}
 			this.n.nextLine();
 		}while(invalidInput);
-		
 	}
-	
+	public void log(cor move1) {
+		logs[logNum]=new cor(move1.getX(), move1.getY());
+		logNum++;
+	}
+
 	public void runGame() {
 		setGame();
 		printBoard();
 		do {
 			 if(userTag==aiTag) {
-				evaluate.aiTurn(this.board, this.aiTag,this.turn);
+				evaluate.aiTurn(this.board, this.aiTag,this.turn, this.logs, this.logNum);
 				printBoard();
 				toggleUserTag();
 				increaseTurn();
+				logNum+=2;
 			}
 			//printBoard();
-			if(winchecker)  ///////// 이거!!!
+			if(winchecker)  //////// 이거!!!
 				break;
 			getInput();
 			increaseTurn();
