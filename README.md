@@ -8,7 +8,7 @@
   2. 다만 처음 착수하는 흑의 경우는 첫턴에 흑돌 하나만 착수 가능하다. (이 프로그렘에서는 대회의 규칙에 따라 흑의 첫수는 정중앙에만 착수한다.)
   3. 오목의 3-3 불가 같은 규칙은 적용되지 않는다. 
   4. 게임이 시작하기 전에 적돌이 배치될 수 있다. 적돌은 흑과 백 둘 다 사용할 수 없는 돌로 막힌 자리이다. 
----
+
 
 
 
@@ -34,7 +34,7 @@
   2. in the very first player's very first turn (player with black stone), only one stone can be placed. (due to the rule of the competition, this program is designed to place it on the very center of the board)
   3. the rules of 3-3 in gomoku does not apply to this game. 
   4. before game start, few red stones can be placed on the board, red stone is a stone that neither white or black can use to connect their stones. (it's a dead stone)
----
+
 
 ## Operation Order: 
 
