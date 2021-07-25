@@ -191,11 +191,11 @@ public class board {
 	//return true for no winner, false for a winner
 	public boolean checkWinCondition() {
 		int k = 0;
-		int count=0; // ë§Œì•½ countê°€ 6ì´ ë˜ë©´ ìœ¡ëª©ì´ ì™„ì„±ëë‹¤ê³  íŒì •í•˜ê³  return true;
-		int[][] checkboard = new int[19][19]; //board ë³µì‚¬í•˜ê¸° ìœ„í•œ board.
+		int count=0; // ¸¸¾à count°¡ 6ÀÌ µÇ¸é À°¸ñÀÌ ¿Ï¼ºµÆ´Ù°í ÆÇÁ¤ÇÏ°í return true;
+		int[][] checkboard = new int[19][19]; //board º¹»çÇÏ±â À§ÇÑ board.
 		
 		/**
-		 * boardì—ì„œ checkboardë¡œ ë³µì‚¬í•˜
+		 * board¿¡¼­ checkboard·Î º¹»çÇÏ
 		 */
 		for(int i = 0; i< 19; i++) {
 			for(int j = 0; j< 19; j++) {
@@ -404,7 +404,7 @@ public class board {
 				aiTurnFunc();
 			}
 			//printBoard();
-			if(winchecker)  //////// ì´ê±°!!!
+			if(winchecker)  //////// ÀÌ°Å!!!
 				break;
 			//getInput();
 			increaseTurn();

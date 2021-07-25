@@ -75,12 +75,12 @@ public class evaluate { //
 	}
 
 	static int aiInput(int[][] board, int[][] scoreBoard, int aiTag, cor[] logs, int logNum) {
-		// ì—¬ê¸°ì„œë¶€í„°ëŠ” ì ìˆ˜ì…ë ¥ ë°›ì€ ê±¸ë¡œ ì…ë ¥í•´ì•¼í•¨.
-		// int[][] checkscore = new int[19][19]; //board ë³µì‚¬í•˜ê¸° ìœ„í•œ board.
+		// ¿©±â¼­ºÎÅÍ´Â Á¡¼öÀÔ·Â ¹ŞÀº °É·Î ÀÔ·ÂÇØ¾ßÇÔ.
+		// int[][] checkscore = new int[19][19]; //board º¹»çÇÏ±â À§ÇÑ board.
 		int high_i = 0, high_j = 0;
 		int high_score = 0;
 		/**
-		 * boardì—ì„œ checkboardë¡œ ë³µì‚¬í•˜ê¸°
+		 * board¿¡¼­ checkboard·Î º¹»çÇÏ±â
 		 */
 		/*
 		 * for(int i = 0; i< 19; i++) { for(int j = 0; j< 19; j++) { checkscore[i][j] =
@@ -232,16 +232,16 @@ public class evaluate { //
 	 * 
 	 */
 	/*
-	 * start_index_x,y ì‹œì‘í•˜ëŠ” ì¢Œí‘œ direction ë°© userTag_confirm í‘ì¸ì§€ ë°±ì¸ì§€ í™•ì¸ onerawdatalen
-	 * ëŠ” ë„˜ì–´ì˜¤ëŠ” arrayì˜ ê¸¸ì´ (ëŒ€ê°ì„  ë•Œë¬¸ì—) one_rawData[] ëŠ” array ê°’
+	 * start_index_x,y ½ÃÀÛÇÏ´Â ÁÂÇ¥ direction ¹æ userTag_confirm ÈæÀÎÁö ¹éÀÎÁö È®ÀÎ onerawdatalen
+	 * ´Â ³Ñ¾î¿À´Â arrayÀÇ ±æÀÌ (´ë°¢¼± ¶§¹®¿¡) one_rawData[] ´Â array °ª
 	 */
 
 	public static void evaGiveScoreC1(int[][] scoreBoard, int dummycell[], int onerawdatalen, int userTag, cor move,
 			int direction, int runNumber, int offOrDef, int turn) {
-		// int[] dummycell = new int[onerawdatalen]; // ë§Œì•½ ìƒëŒ€í¸ ëŒì— ì˜í•´ ì“°ë ˆê¸° cell ì´ ë‚˜ì˜¬ ë•Œë¥¼
-		// ëŒ€ë¹„.
+		// int[] dummycell = new int[onerawdatalen]; // ¸¸¾à »ó´ëÆí µ¹¿¡ ÀÇÇØ ¾²·¹±â cell ÀÌ ³ª¿Ã ¶§¸¦
+		// ´ëºñ.
 		int[] one_rawData = new int[onerawdatalen];
-		int first_notusertag = -1, gab_notusertag = 0; // dummycellì„ ì‚´í´ë³¼ ë•Œ ë§Œì•½ notusertagê°€ ìˆë‹¤ë©´ ìœ„ì¹˜ë¥¼ ê¸°ì–µí•˜ê¸° ìœ„í•œ ìˆ˜
+		int first_notusertag = -1, gab_notusertag = 0; // dummycellÀ» »ìÆìº¼ ¶§ ¸¸¾à notusertag°¡ ÀÖ´Ù¸é À§Ä¡¸¦ ±â¾ïÇÏ±â À§ÇÑ ¼ö
 		int oppoTag = opponentTag(userTag);
 		int pos = 0, stoStart = -1, frontGap = 0, btwGap = 0, count1 = 0, count2 = 0, count2Start = -1, backGap = 0;
 		boolean conti = false, blocked = false, backBlocked = false;
@@ -258,20 +258,20 @@ public class evaluate { //
 		 * convert dead area to oppotag
 		 */
 		/*
-		 * for (int i = 0; i < onerawdatalen; i++) { // ë°›ì•„ì˜¨ ë°ì´í„°ë¥¼ dummycell ë¡œ ì˜®ê¸´ë‹¤.
+		 * for (int i = 0; i < onerawdatalen; i++) { // ¹Ş¾Æ¿Â µ¥ÀÌÅÍ¸¦ dummycell ·Î ¿Å±ä´Ù.
 		 * dummycell[i] = one_rawData[i]; }
 		 */
 		for (int i = 0; i < onerawdatalen; i++) {
 			if (dummycell[i] == 3)
 				dummycell[i] = oppoTag;
-			if (dummycell[i] == oppoTag) { // ë§Œì•½ ê° cell ì´ notusertag ë¼ë©´.
-				if (first_notusertag == -1) { // ì²˜ìŒ notusertagê°€ ë‚˜ì™”ë‹¤ë©´.
-					gab_notusertag = i; // gabì€ ì²˜ìŒ ë‚˜ì˜¨ ìˆ˜ index ë§Œí¼ì´ë‹¤.
-					first_notusertag = 0; // ì´ì œ notusertagê°€ í•œ ë²ˆ ë‚˜ì™”ê¸° ë•Œë¬¸ì— 0ìœ¼ë¡œ ë°”ê¿”ì¤€ë‹¤.
+			if (dummycell[i] == oppoTag) { // ¸¸¾à °¢ cell ÀÌ notusertag ¶ó¸é.
+				if (first_notusertag == -1) { // Ã³À½ notusertag°¡ ³ª¿Ô´Ù¸é.
+					gab_notusertag = i; // gabÀº Ã³À½ ³ª¿Â ¼ö index ¸¸Å­ÀÌ´Ù.
+					first_notusertag = 0; // ÀÌÁ¦ notusertag°¡ ÇÑ ¹ø ³ª¿Ô±â ¶§¹®¿¡ 0À¸·Î ¹Ù²ãÁØ´Ù.
 				} else {
-					gab_notusertag = i - first_notusertag - 1; // ë‘ë²ˆì§¸ notusertagê°€ ë‚˜ì™”ë‹¤ë©´ ë‘ indexì˜ ì°¨ì´ì— -1 ì´ë‹¤.
+					gab_notusertag = i - first_notusertag - 1; // µÎ¹øÂ° notusertag°¡ ³ª¿Ô´Ù¸é µÎ indexÀÇ Â÷ÀÌ¿¡ -1 ÀÌ´Ù.
 				}
-				if (gab_notusertag < 6) { // ë§Œì•½ ì°¨ì´ê°€ 5ì´í•˜ì´ë©´ ì–´ì°¨í”¼ ì£½ì€ ê³µê°„, ë”°ë¼ì„œ ê²€ì€ ëŒë§Œ ìˆë‹¤ê³  ìƒê°í•œë‹¤.
+				if (gab_notusertag < 6) { // ¸¸¾à Â÷ÀÌ°¡ 5ÀÌÇÏÀÌ¸é ¾îÂ÷ÇÇ Á×Àº °ø°£, µû¶ó¼­ °ËÀº µ¹¸¸ ÀÖ´Ù°í »ı°¢ÇÑ´Ù.
 					for (int j = first_notusertag; j < i; j++) {
 						dummycell[j] = oppoTag;
 					}
@@ -292,7 +292,7 @@ public class evaluate { //
 		 * diagnosis--------------------------------------------------------------
 		 */
 
-		// ë§Œì•½ì— ì•„êµ° ëŒë“¤ ì‚¬ì´ì— ì¥ì• ë¬¼ì´ ì—†ë‹¤ë©´ ì‹œì‘ê³¼ ëì€ ë°ë ¤ì™€ì„œ 1-1-11ì˜ ì¼€ì´ìŠ¤ë¥¼ í™•ì¸í•  ìˆ˜ ìˆë„ë¡
+		// ¸¸¾à¿¡ ¾Æ±º µ¹µé »çÀÌ¿¡ Àå¾Ö¹°ÀÌ ¾ø´Ù¸é ½ÃÀÛ°ú ³¡Àº µ¥·Á¿Í¼­ 1-1-11ÀÇ ÄÉÀÌ½º¸¦ È®ÀÎÇÒ ¼ö ÀÖµµ·Ï
 
 		while (pos < onerawdatalen) {
 			int temp;
@@ -314,7 +314,7 @@ public class evaluate { //
 				}
 				frontGap = 0;
 			} else if (temp == 0) {
-				if (conti) {// ì•ì— ëŒì´ ì˜ ë‚˜ì˜¤ë‹¤ê°€ ë¹ˆ ê³µê°„ ë”°ë¼ì„œ ë’¤ì— ìƒíƒœì— ë”°ë¼ì„œ ì ìˆ˜ë¥¼ ì¤˜ì•¼í—Œë‹¤.
+				if (conti) {// ¾Õ¿¡ µ¹ÀÌ Àß ³ª¿À´Ù°¡ ºó °ø°£ µû¶ó¼­ µÚ¿¡ »óÅÂ¿¡ µû¶ó¼­ Á¡¼ö¸¦ Áà¾ßÇå´Ù.
 					btwGap++;
 					for (int j = 1; j < 4; j++) {
 						if (pos + j >= onerawdatalen) {
@@ -340,14 +340,14 @@ public class evaluate { //
 							System.out.println("case isolated " + frontGap + " " + count1);
 						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked,
 								backBlocked, runNumber, offOrDef, turn);
-						// ì—¬ê¸°ì„œë„ isoë¼ê³  ë°íˆê³  ì ìˆ˜ë¥¼ ì¤˜ì•¼
+						// ¿©±â¼­µµ iso¶ó°í ¹àÈ÷°í Á¡¼ö¸¦ Áà¾ß
 					} else if (blocked) {
 						if (DEBUG)
 							System.out.println("case blocked " + frontGap + " " + count1 + " " + btwGap);
 						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked,
 								backBlocked, runNumber, offOrDef, turn);
-						// blocked ë°íˆê³  btwGapì´ ë’¤ì— ê³µê°„ì´ë¼ê³  ë„˜ê¸°ê³  ê³„ì‚°
-					} else if (btwGap < 4) { // count2ê°€ ìˆë‹¤ê³  ìƒê°í•˜ëŠ” case
+						// blocked ¹àÈ÷°í btwGapÀÌ µÚ¿¡ °ø°£ÀÌ¶ó°í ³Ñ±â°í °è»ê
+					} else if (btwGap < 4) { // count2°¡ ÀÖ´Ù°í »ı°¢ÇÏ´Â case
 						// frontGap count1 gap count2 --> score
 						pos += btwGap;
 						count2Start = pos;
@@ -372,10 +372,10 @@ public class evaluate { //
 									"case connected " + frontGap + " " + count1 + " " + btwGap + " " + count2 + " ");
 						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked,
 								backBlocked, runNumber, offOrDef, turn);
-						// ì—¬ê¸°ì„œ frontgap count1 btwgap count2ë¡œ ì ìˆ˜ë¥¼ ì²˜ë¦¬í•˜ê³  btwgapì„ frontgapìœ¼ë¡œ, count2ì„
-						// count1ë¡œ ëŒë¦¬ë©´ ê·¸ê²Œ ë‹¤ìŒ ëŒë“¤ì˜ infoê°€ ëœë‹¤.
-						// ê·¸ë¦¬ê³  ê·¸ë ‡ê²Œ í•´ì„œ frontgapì— ì ìˆ˜ë¥¼ ë„£ì„ë ¤ê³  í•˜ëŠ”ë° ìˆìœ¼ë©´ ì•ˆë„£ê³  í˜ìŠ¤í•˜ë©´ ëœë‹¤. ê·¸ê²Œ ë²½ìœ¼ë¡œë§‰í˜€ìˆëŠ” ê²Œ ì•„ë‹ˆê¸°ë•Œë¬¸ì— ì ìˆ˜ë¥¼ ì§œê²Œ
-						// ì¤„ í•„ìš”ê°€ ì—†ë‹¤.
+						// ¿©±â¼­ frontgap count1 btwgap count2·Î Á¡¼ö¸¦ Ã³¸®ÇÏ°í btwgapÀ» frontgapÀ¸·Î, count2À»
+						// count1·Î µ¹¸®¸é ±×°Ô ´ÙÀ½ µ¹µéÀÇ info°¡ µÈ´Ù.
+						// ±×¸®°í ±×·¸°Ô ÇØ¼­ frontgap¿¡ Á¡¼ö¸¦ ³ÖÀ»·Á°í ÇÏ´Âµ¥ ÀÖÀ¸¸é ¾È³Ö°í Æä½ºÇÏ¸é µÈ´Ù. ±×°Ô º®À¸·Î¸·ÇôÀÖ´Â °Ô ¾Æ´Ï±â¶§¹®¿¡ Á¡¼ö¸¦ Â¥°Ô
+						// ÁÙ ÇÊ¿ä°¡ ¾ø´Ù.
 					} else
 						System.out.println("bug2");
 					// check if there is stone within 3 blocks, no then isolated, yes then count
@@ -573,5 +573,5 @@ public class evaluate { //
 	}
 }
 
-//ë§‰íŒê²Œ 2ì¹¸ ë–¨ì–´ì ¸ìˆìœ¼ë©´ ë°˜ëŒ€í¸ /4.5 3ì¹¸ ë–¨ì–´ì ¸ìˆìœ¼ë©´ ê·¸ëŒ€
-//ì•ì— ë“¤ì–´ê°€ëŠ” ì ìˆ˜ë“¤ì€ ëŒë“¤ì—ë§Œ ì˜ì¡´í•˜ì§€ ë§ê³  ë’¤ì˜ ê°­ê³¼ ì•ì˜ ëŒë“¤ì„ ê°™ì´ ê³ ë ¤í•˜ë©´ í›¨ì”¬ ì¢‹ì„
+//¸·Èù°Ô 2Ä­ ¶³¾îÁ®ÀÖÀ¸¸é ¹İ´ëÆí /4.5 3Ä­ ¶³¾îÁ®ÀÖÀ¸¸é ±×´ë
+//¾Õ¿¡ µé¾î°¡´Â Á¡¼öµéÀº µ¹µé¿¡¸¸ ÀÇÁ¸ÇÏÁö ¸»°í µÚÀÇ °¸°ú ¾ÕÀÇ µ¹µéÀ» °°ÀÌ °í·ÁÇÏ¸é ÈÎ¾À ÁÁÀ»
