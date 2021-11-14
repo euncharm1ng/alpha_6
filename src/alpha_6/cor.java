@@ -24,5 +24,8 @@ public class cor {
 		this.y=y;
 		return;
 	}
+	public String toString() {
+		return String.format("x: %02d, y: %02d", this.x, this.y);
+	}
 	
 }
