@@ -1,11 +1,15 @@
 package alpha_6;
 
 public class evaluate { //
+	final static private int EMPTY = 0;
+	final static private int BLACK = 1;
+	final static private int WHITE = 2;
+	final static private int RED = 3;
 	// board scoreForBlack, scoreForwhite;
 	// static int [][]totalScore= new int[19][19];
 	static cor move = new cor();
 	final static int LEFTRIGHT = 0, TOPDOWN = 1, TOPLBOTR = 2, BOTLTOPR = 3, OFFENSE = 1, DEFENSE = 2;
-	static boolean DEBUG = false;
+	static boolean DEBUG = true;
 	final static int[][] scoresArray1 = { { 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 },
 			{ 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, { 3, 6, 11, 20 },
 			{ 97, 387, 704, 1280 }, { 24, 1549, 2816, 5120 }, { 209600, 838400, 3353600, 13414400 },
@@ -100,6 +104,7 @@ public class evaluate { //
 		System.out.println();
 		return logNum;
 	}
+	
 	/*
 	 * read board left to right, top to bottom, left top to right bottom, left
 	 * bottom to right top if there is a stone, hand direction, cor of the beginning
@@ -107,7 +112,6 @@ public class evaluate { //
 	 * start from (0,0) except left bottom to right top which starts from (18,0)
 	 * (0,0) being left top corner; (18,0) being left bottom
 	 */
-
 	public static void readBoWDir(int[][] rawData, int[][] scoreBoard, int userTag, int runNumber, int offOrDef,
 			int turn) {
 		int k = 0;
@@ -212,7 +216,7 @@ public class evaluate { //
 						k--;
 						pos++;
 					}
-					evaGiveScoreC1(scoreBoard, oneRow, 18 - i, userTag, move, BOTLTOPR, runNumber, offOrDef, turn);
+					evaGiveScoreC1(scoreBoard, oneRow, 19 - i, userTag, move, BOTLTOPR, runNumber, offOrDef, turn);
 					break;
 				}
 				k--;
@@ -221,6 +225,7 @@ public class evaluate { //
 
 		return;
 	}
+	
 	/*
 	 * evaluate and give score to new score board according to input C 1is for first
 	 * move, C2 is for second move, the score for both cases are different.
@@ -230,7 +235,6 @@ public class evaluate { //
 	 * start_index_x,y 시작하는 좌표 direction 방 userTag_confirm 흑인지 백인지 확인 onerawdatalen
 	 * 는 넘어오는 array의 길이 (대각선 때문에) one_rawData[] 는 array 값
 	 */
-
 	public static void evaGiveScoreC1(int[][] scoreBoard, int dummycell[], int onerawdatalen, int userTag, cor move,
 			int direction, int runNumber, int offOrDef, int turn) {
 		// int[] dummycell = new int[onerawdatalen]; // 만약 상대편 돌에 의해 쓰레기 cell 이 나올 때를
@@ -257,7 +261,7 @@ public class evaluate { //
 		 * dummycell[i] = one_rawData[i]; }
 		 */
 		for (int i = 0; i < onerawdatalen; i++) {
-			if (dummycell[i] == 3)
+			if (dummycell[i] == RED)
 				dummycell[i] = oppoTag;
 			if (dummycell[i] == oppoTag) { // 만약 각 cell 이 notusertag 라면.
 				if (first_notusertag == -1) { // 처음 notusertag가 나왔다면.
@@ -308,10 +312,11 @@ public class evaluate { //
 					stoStart = -1;
 				}
 				frontGap = 0;
-			} else if (temp == 0) {
+			} else if (temp == EMPTY) {
+				/*
 				if (conti) {// 앞에 돌이 잘 나오다가 빈 공간 따라서 뒤에 상태에 따라서 점수를 줘야헌다.
 					btwGap++;
-					for (int j = 1; j < 4; j++) {
+					for (int j = 1; j < 5; j++) { // TOUCHED: 4 -> 5
 						if (pos + j >= onerawdatalen) {
 							if (DEBUG)
 								System.out.println("end of line");
@@ -353,9 +358,9 @@ public class evaluate { //
 							pos++;
 						}
 						for (int i = 0; i < 2; i++) {
-							if (pos + i > onerawdatalen)
+							if (pos + i >= onerawdatalen) //TOUCHED: > -> >=
 								break;
-							else if (dummycell[pos + i] == 0)
+							else if (dummycell[pos + i] == EMPTY)
 								backGap++;
 							else if (dummycell[pos + i] == oppoTag)
 								backBlocked = true;
@@ -388,6 +393,7 @@ public class evaluate { //
 				} else {
 					frontGap++;
 				}
+				*/
 			} else if (temp == userTag) {
 				if (stoStart == -1)
 					stoStart = pos;

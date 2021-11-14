@@ -150,7 +150,6 @@ public class board {
 		for(int i =0; i<num; i++) {
 			logNum--;
 			this.board[logs[logNum].getX()][logs[logNum].getY()]=0;
-			
 		}
 	}
 	
