@@ -8,7 +8,7 @@ public class evaluate {
 	final static private int depth = 3;
 	static cor move = new cor();
 	final static int LEFTRIGHT = 0, TOPDOWN = 1, TOPLBOTR = 2, BOTLTOPR = 3, OFFENSE = 1, DEFENSE = 2;
-	static boolean DEBUG = false;
+	static boolean DEBUG = true;
 	final static int[][] scoresArray1 = { { 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 },
 			{ 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, { 3, 6, 11, 20 },
 			{ 97, 387, 704, 1280 }, { 24, 1549, 2816, 5120 }, { 209600, 838400, 3353600, 13414400 },
@@ -697,8 +697,6 @@ public class evaluate {
 		
 
 	}
-	
-
 	public static void printDebug(int[][] scoreBoard) {
 		System.out.println(
 				"||x\\y\t   0    1    2    3    4    5    6    7    8    9    a    1    2    3    4    5    6    7    8");
