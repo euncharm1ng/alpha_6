@@ -1,4 +1,4 @@
-package alpha_6;
+//package alpha_6;
 
 import java.util.Scanner;
 
@@ -103,48 +103,6 @@ public class board {
 	public void enterInput(cor move1, int tag_p) {
 		this.board[move1.getX()][move1.getY()]=tag_p;
 	}
-
-	/*
-	public void getInput() {
-		if(isFull()) {
-			System.out.println("The board is full");
-			return;
-		}
-		
-		int x1=0, x2=0, y1=0, y2=0;
-		cor move1, move2;
-		boolean checker=false;
-		char menu;
-		do {
-			System.out.print("press z to cancel previous move, i to input: ");	
-			menu=this.n.next().charAt(0);
-			this.n.nextLine();
-			if(menu=='i'||menu=='I') {
-				do { //checker for invalid input
-					if(checker) System.out.println("wrong input! plz retry!");
-					System.out.println("input syntax: x1 y1 x2 y2!! 0~18:");
-					x1=this.n.nextInt();
-					y1=this.n.nextInt();
-					x2=this.n.nextInt();
-					y2=this.n.nextInt();
-					this.n.nextLine();
-					move1=new cor(x1, y1);
-					move2=new cor(x2, y2);
-				}while(checker=(!isValidInput(move1, move2)));	
-				enterInput(move1, move2);
-				log(move1);
-				log(move2);
-				System.out.println(logs[logNum-1].getX() + " "+ logs[logNum-1].getY());
-				break;
-			}else if(menu=='z'||menu=='Z') {
-				deleteMove(4);
-				printBoard();
-			}
-			else
-				System.out.print("wrong input plz retry: ");
-		}while(true);
-	}
-	*/
 	
 	public void deleteMove(int num) {
 		for(int i =0; i<num; i++) {
@@ -152,7 +110,6 @@ public class board {
 			this.board[logs[logNum].getX()][logs[logNum].getY()]=0;
 		}
 	}
-	
 
 	
 	public ConnectSix setGame() throws ConnSixException {
@@ -218,7 +175,8 @@ public class board {
 			this.board[9][9] = aiTag;
 			System.out.println(first);
 			enterInput(first);
-		} else if (aiTag == WHITE) {
+		}
+		else if (aiTag == WHITE) {
 			String first = conSix.drawAndRead("");
 			if (first.compareTo("K10") == 0) { enterInput(new cor(9, 9), awayTag); }
 			else { System.out.println("not k10?"); }
@@ -226,8 +184,9 @@ public class board {
 		
 		printBoard();
 		do {
+			System.out.println(logNum);
 			evaluate.aiTurn(this.board, this.aiTag, this.turn, this.logs, this.logNum);
-//			logNum += 2;
+			System.out.println(logNum);
 			enterInput(conSix.drawAndRead(makeNotation(logs[logNum], logs[logNum+1])));
 
 			increaseTurn();
@@ -235,6 +194,5 @@ public class board {
 		}while(true);
 		
 	}
-	
 }//end of class
 
