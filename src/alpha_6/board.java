@@ -185,7 +185,8 @@ public class board {
 		printBoard();
 		do {
 			System.out.println(logNum);
-			evaluate.aiTurn(this.board, this.aiTag, this.turn, this.logs, this.logNum);
+			//evaluate.aiTurn(this.board, this.aiTag, this.turn, this.logs, this.logNum);
+			evaluate.minimax(board, aiTag, turn, 3, this.logs, logNum);
 			System.out.println(logNum);
 			enterInput(conSix.drawAndRead(makeNotation(logs[logNum], logs[logNum+1])));
 

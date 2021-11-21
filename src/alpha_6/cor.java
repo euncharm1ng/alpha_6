@@ -7,8 +7,8 @@ public class cor {
 		this.y=y;
 	}
 	cor(){
-		this.x=0;
-		this.y=0;
+		this.x=-1;
+		this.y=-1;
 	}
 	public int getX() {
 		return this.x;
