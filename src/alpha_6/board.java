@@ -3,29 +3,28 @@
 import java.util.Scanner;
 
 public class board {
-	final static private int EMPTY = 0;
-	final static private int BLACK = 1;
-	final static private int WHITE = 2;
-	final static private int RED = 3;
+	final private int EMPTY = 0;
+	final private int BLACK = 1;
+	final private int WHITE = 2;
+	final private int RED = 3;
 	
 	int [][]board;
-	int awayTag, homeTag;
-	int turn, logNum;
+	int awayTag, homeTag, turn;
 	Scanner n;
-	cor[] logs;
+	cor[] evaluateResult;
 	ConnectSix conSix;
 
 	public board() {
 		this.board=new int[19][19];
 		initializeBoard();
 		n=new Scanner(System.in);
-		logs=new cor[361];
-		logNum=0;
+		evaluateResult=new cor[2];
+		evaluateResult[0] = new cor();
+		evaluateResult[1] = new cor();
 	}
 	
 	private void increaseTurn() {
 		turn++;
-		logNum += 2;
 	}
 	
 	//initialize the board and input 0 to all place
@@ -59,8 +58,8 @@ public class board {
 	
 
 	public void enterInput(String msg) {
-		String[] redStones = msg.split(":");
-		for(String stone : redStones) {
+		String[] stones = msg.split(":");
+		for(String stone : stones) {
 			enterInput(parse(stone), awayTag);
 		}
 	}
@@ -107,19 +106,14 @@ public class board {
 		return new cor(x, y);
 	}
 	
-	public String makeNotation(cor move1, cor move2) {
-		System.out.println("make notation " + move1);
-		System.out.println("make natation " + move2);
-		char alpha1 = (char) (move1.getJ() + 'A');
+	public String makeNotation() {
+		System.out.println("make notation " + evaluateResult[0]);
+		System.out.println("make natation " + evaluateResult[1]);
+		char alpha1 = (char) (evaluateResult[0].getJ() + 'A');
 		if (alpha1 >= 'I') alpha1++;
-		char alpha2 = (char) (move2.getJ() + 'A');
+		char alpha2 = (char) (evaluateResult[1].getJ() + 'A');
 		if (alpha2 >= 'I') alpha2++;
-		return String.format("%c%02d:%c%02d",alpha1, 19-move1.getI(), alpha2, 19-move2.getI());
-	}
-	
- 	public void log(cor move1) {
-		logs[logNum]=new cor(move1.getJ(), move1.getJ());
-		logNum++;
+		return String.format("%c%02d:%c%02d", alpha1, 19-evaluateResult[0].getI(), alpha2, 19-evaluateResult[1].getI());
 	}
 
 	public void runGame() throws ConnSixException {
@@ -141,11 +135,9 @@ public class board {
 		
 		printBoard();
 		do {
-			System.out.println(logNum);
 			//evaluate.aiTurn(this.board, this.homeTag, this.turn, this.logs, this.logNum);
-			evaluate.minimax(board, homeTag, turn, 3, this.logs, logNum);
-			System.out.println(logNum);
-			enterInput(conSix.drawAndRead(makeNotation(logs[logNum], logs[logNum+1])));
+			evaluate.runMinimax(board, homeTag, turn, this.evaluateResult);
+			enterInput(conSix.drawAndRead(makeNotation()));
 
 			increaseTurn();
 			printBoard();

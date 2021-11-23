@@ -1,5 +1,3 @@
-//package alpha_6;
-
 public class cor {
 	int i, j;
 	cor(int i, int j){

@@ -1,9 +1,12 @@
+//package alpha_6;
+
 public class evaluate {
 	final static private int EMPTY = 0;
 	final static private int BLACK = 1;
 	final static private int WHITE = 2;
 	final static private int RED = 3;
-	final static private int width = 3;
+	final static private int WIDTH = 3;
+	final static private int DEPTH = 3;
 	static cor move = new cor();
 	final static int LEFTRIGHT = 0, TOPDOWN = 1, TOPLBOTR = 2, BOTLTOPR = 3, OFFENSE = 1, DEFENSE = 2;
 	static boolean DEBUG = false, PRINTINFO = false;
@@ -42,101 +45,146 @@ public class evaluate {
 		aiInput(board, scoreBoard, aiTag, logs, logNum+1);
 	}
 
-	public static long
-	minimax(int[][] board, int currTag, int turn, int currDepth, cor[] logs, int logNum)
+	public static void
+	runMinimax(int[][] board, int currTag, int turn, cor[] evaluateResult)
 	{
-		if(currDepth <= 0) return 0;
 		int[][] scoreBoard = new int[19][19];
-		cor[] topFirstMoves = new cor[width], topSecondMoves = new cor[width];
-		int[] topFirstScore = new int[width], topSecondScore = new int[width];
+		cor[] topFirstMoves = new cor[WIDTH], topSecondMoves = new cor[WIDTH];
+		int[] topFirstScore = new int[WIDTH], topSecondScore = new int[WIDTH];
 		boolean bestRecorded = false;
 		int oppoTag = opponentTag(currTag); 
 		long bestScore = 0, currScore = 0;
 		cor bestFirst = new cor(), bestSecond = new cor();
-		for(int i = 0; i < width; i++){ 
+		for(int i = 0; i < WIDTH; i++){ 
 			topFirstMoves[i] = new cor(); 
 			topSecondMoves[i] = new cor();
 		}
 
-		initializeScoreBoard(scoreBoard);
 		readBoWDir(board, scoreBoard, currTag, 1, OFFENSE, turn);
 		readBoWDir(board, scoreBoard, oppoTag, 1, DEFENSE, turn);
-
 		findTop(scoreBoard, topFirstMoves, topFirstScore);
-		for(int i = 0; i < width; i++){
-			board[topFirstMoves[i].getI()][topFirstMoves[i].getJ()] = currTag;
+		outerloop:
+		for(int i = 0; i < WIDTH; i++){
+			placeMove(board, topFirstMoves[i], currTag);
+			if(isWin(board, topFirstMoves[i])){
+				System.out.println("WIN DETECTED move 1" + topFirstMoves[i] + " " + DEPTH);
+				int second = 0;
+				if(i == 0) second = 1;
+				bestFirst.setI(topFirstMoves[i].getI());
+				bestFirst.setJ(topFirstMoves[i].getJ());
+				bestSecond.setI(topFirstMoves[second].getI());
+				bestSecond.setJ(topFirstMoves[second].getJ());
+				break;
+			}
+
+			initializeScoreBoard(scoreBoard);
+			readBoWDir(board, scoreBoard, currTag, 2, OFFENSE, turn);
+			readBoWDir(board, scoreBoard, oppoTag, 2, DEFENSE, turn);
+			findTop(scoreBoard, topSecondMoves, topSecondScore);
+			for(int j = 0; j < WIDTH; j++){
+				currScore = topFirstScore[i] + topSecondScore[j];
+				placeMove(board, topSecondMoves[j], currTag);
+				if(isWin(board, topSecondMoves[j])){
+					System.out.println("WIN DETECTED MOVE 2 " + topFirstMoves[i] + topSecondMoves[j] + " " + DEPTH);
+					bestFirst.setI(topFirstMoves[i].getI());
+					bestFirst.setJ(topFirstMoves[i].getJ());
+					bestSecond.setI(topSecondMoves[j].getI());
+					bestSecond.setJ(topSecondMoves[j].getJ());
+					break outerloop;
+				}
+				currScore -= minimax(board, oppoTag, turn+1, DEPTH-1);
+
+				printBoard(board);
+
+				placeMove(board, topSecondMoves[j], EMPTY);
+
+				if(!bestRecorded || currScore > bestScore){ 
+					bestScore = currScore;
+					bestFirst.setI(topFirstMoves[i].getI());// = topFirstMoves[i].i;
+					bestFirst.setJ(topFirstMoves[i].getJ());// = topFirstMoves[i].j;
+					bestSecond.setI(topSecondMoves[j].getI());// = topSecondMoves[i].i;
+					bestSecond.setJ(topSecondMoves[j].getJ());// = topSecondMoves[i].j;
+					bestRecorded = true;
+				}
+			}
+			placeMove(board, topFirstMoves[i], EMPTY);
+		}
+		placeMove(board, bestFirst, currTag);
+		placeMove(board, bestSecond, currTag);
+		evaluateResult[0].setI(bestFirst.getI());
+		evaluateResult[0].setJ(bestFirst.getJ());
+		evaluateResult[1].setI(bestSecond.getI());
+		evaluateResult[1].setJ(bestSecond.getJ());
+		System.out.println("minimax:: " + bestFirst + " " + bestSecond + " " + bestScore);
+	}
+
+	public static long
+	minimax(int[][] board, int currTag, int turn, int currDepth)
+	{
+		if(currDepth <= 0) return 0;
+
+		int[][] scoreBoard = new int[19][19];
+		cor[] topFirstMoves = new cor[WIDTH], topSecondMoves = new cor[WIDTH];
+		int[] topFirstScore = new int[WIDTH], topSecondScore = new int[WIDTH];
+		boolean bestRecorded = false;
+		int oppoTag = opponentTag(currTag); 
+		long bestScore = 0, currScore = 0;
+		cor bestFirst = new cor(), bestSecond = new cor();
+		for(int i = 0; i < WIDTH; i++){ 
+			topFirstMoves[i] = new cor(); 
+			topSecondMoves[i] = new cor();
+		}
+
+		readBoWDir(board, scoreBoard, currTag, 1, OFFENSE, turn);
+		readBoWDir(board, scoreBoard, oppoTag, 1, DEFENSE, turn);
+		findTop(scoreBoard, topFirstMoves, topFirstScore);
+		for(int i = 0; i < WIDTH; i++){
+			placeMove(board, topFirstMoves[i], currTag);
 			if(isWin(board, topFirstMoves[i])) {
 				System.out.println("WIN DETECTED move 1" + topFirstMoves[i] + " " + currDepth);
-
-				if (currDepth == 3){
-					System.out.println("move1 win and depth == 3");
-					int secondMove = 0;
-					if(i == 0) secondMove = 1;
-					board[topFirstMoves[secondMove].getI()][topFirstMoves[secondMove].getJ()] = currTag;
-					logs[logNum] = new cor(topFirstMoves[i].getI(), topFirstMoves[i].getJ());
-					logs[logNum+1] = new cor(topFirstMoves[secondMove].getI(), topFirstMoves[secondMove].getJ());
-					System.out.println("minimax:: " + bestFirst + " " + bestSecond + " " + bestScore);
-				}
-				else board[topFirstMoves[i].getI()][topFirstMoves[i].getJ()] = EMPTY;
+				placeMove(board, topFirstMoves[i], EMPTY);
 				return 10000000000L;
 			}
-			if(currDepth == 3) printBoard(board);
 			
 			initializeScoreBoard(scoreBoard);
 			readBoWDir(board, scoreBoard, currTag, 2, OFFENSE, turn);
 			readBoWDir(board, scoreBoard, oppoTag, 2, DEFENSE, turn);
-
-			for(int j = 0; j < width; j++){
-				topSecondMoves[j].i = -1;
-				topSecondMoves[j].j = -1;
-				topSecondScore[j] = 0;
-			}
 			findTop(scoreBoard, topSecondMoves, topSecondScore);
-			for(int j = 0; j < width; j++){
-				currScore = topFirstScore[i] + topSecondScore[j];
-				board[topSecondMoves[j].getI()][topSecondMoves[j].getJ()] = currTag;
-				if(isWin(board,topSecondMoves[j])){
-					System.out.println("WIN DETECTED move2" + topSecondMoves[j] + " " + currDepth);
 
-					if (currDepth == 3){
-						logs[logNum] = new cor(topFirstMoves[i].getI(), topFirstMoves[i].getJ());
-						logs[logNum+1] = new cor(topSecondMoves[j].getI(), topSecondMoves[j].getI());
-						System.out.println("minimax:: " + bestFirst + " " + bestSecond + " " + bestScore);
-					}
-					else board[topSecondMoves[j].getI()][topSecondMoves[j].getJ()] = EMPTY;
+			for(int j = 0; j < WIDTH; j++){
+				currScore = topFirstScore[i] + topSecondScore[j];
+				placeMove(board, topSecondMoves[j], currTag);
+				if(isWin(board, topSecondMoves[j])){
+					System.out.println("WIN DETECTED move2" + topFirstMoves[i] + topSecondMoves[j] + " " + currDepth);
+					placeMove(board, topFirstMoves[i], EMPTY);
+					placeMove(board, topSecondMoves[j], EMPTY);
 					return 10000000000L;
 				}
-				currScore -= minimax(board, oppoTag, turn+1, currDepth-1, logs, logNum);
+
+				currScore -= minimax(board, oppoTag, turn+1, currDepth-1);
 
 				if(!bestRecorded || currScore > bestScore){ 
 					bestScore = currScore;
-					bestFirst.i = topFirstMoves[i].i;
-					bestFirst.j = topFirstMoves[i].j;
-					bestSecond.i = topSecondMoves[i].i;
-					bestSecond.j = topSecondMoves[i].j;
 					bestRecorded = true;
 				}
-				board[topSecondMoves[j].getI()][topSecondMoves[j].getJ()] = EMPTY;
+				placeMove(board, topSecondMoves[j], EMPTY);
 			}
-			board[topFirstMoves[i].getI()][topFirstMoves[i].getJ()] = EMPTY;
-		}
-
-		if (currDepth == 3){
-			board[bestFirst.getI()][bestFirst.getJ()] = currTag;
-			board[bestSecond.getI()][bestSecond.getJ()] = currTag;
-			logs[logNum] = new cor(bestFirst.getI(), bestFirst.getJ());
-			logs[logNum+1] = new cor(bestSecond.getI(), bestSecond.getJ());
-			System.out.println("minimax:: " + bestFirst + " " + bestSecond + " " + bestScore);
+			placeMove(board, topFirstMoves[i], EMPTY);
 		}
 		return bestScore;
 	}
 
+	static void
+	placeMove(int[][] board, cor move, int tag)
+	{
+		board[move.getI()][move.getJ()] = tag;
+	}
 	static boolean
 	isWin(int[][] board, cor move)
 	{
 		int count = 0, homeTag = board[move.getI()][move.getJ()];
 		int moveI = move.getI(), moveJ = move.getJ();
-		System.out.println("ISWIN, home tag: " + homeTag + " " + move);
+		//System.out.println("ISWIN, home tag: " + homeTag + " " + move);
 		if(homeTag == 0) System.out.println("************SOMETHING VERY WRONG************");
 		//check horizontal
 		for(int j = moveJ; j < 19; j++){
@@ -211,17 +259,23 @@ public class evaluate {
 	static void
 	findTop(int[][] scoreBoard, cor[] topMoves, int[] topScore)
 	{
+		for(int i = 0; i < WIDTH; i++){
+			topMoves[i].setI(-1);
+			topMoves[i].setJ(-1);
+			topScore[i] = 0;
+		}
+
 		for(int i = 0; i < 19; i++){
 			for(int j = 0; j < 19; j++){
-				for(int k = width-1; k > -1; k--){
+				for(int k = WIDTH-1; k > -1; k--){
 					if(scoreBoard[i][j] > topScore[k]){
 						if(k != 0) continue;
 						else k--;
 					}
-					if(k < width-1){
+					if(k < WIDTH-1){
 						int targetScore = scoreBoard[i][j], targetX = i, targetY = j;
 						int tempScore, tempX, tempY;
-						for(k++; k < width; k++){
+						for(k++; k < WIDTH; k++){
 							tempScore = topScore[k];
 							tempX = topMoves[k].getI();
 							tempY = topMoves[k].getJ();
@@ -664,10 +718,8 @@ public class evaluate {
 	}
 
 	public static int opponentTag(int userTag) {
-		if (userTag == 1)
-			return 2;
-		else
-			return 1;
+		if (userTag == BLACK) return WHITE;
+		else return BLACK;
 	}
 
 	public static void giveScore(long[] one_rawData, int frontGap, int count1, int btwGap, int count2, int backGap,
