@@ -1,31 +1,29 @@
 //package alpha_6;
 
 public class cor {
-	int x, y;
-	cor(int x, int y){
-		this.x=x;
-		this.y=y;
+	int i, j;
+	cor(int i, int j){
+		this.i=i;
+		this.j=j;
 	}
 	cor(){
-		this.x=-1;
-		this.y=-1;
+		this.i=-1;
+		this.j=-1;
 	}
-	public int getX() {
-		return this.x;
+	public int getI() {
+		return this.i;
 	}
-	public int getY() {
-		return this.y;
+	public int getJ() {
+		return this.j;
 	}
-	public void setX(int x) {
-		this.x=x;
-		return;
+	public void setI(int i) {
+		this.i=i;
 	}
-	public void setY(int y) {
-		this.y=y;
-		return;
+	public void setJ(int j) {
+		this.j=j;
 	}
 	public String toString() {
-		return String.format("x: %02d, y: %02d", this.x, this.y);
+		return String.format("i: %02d, j: %02d", this.i, this.j);
 	}
 	
 }

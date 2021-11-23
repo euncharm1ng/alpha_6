@@ -9,17 +9,15 @@ public class board {
 	final static private int RED = 3;
 	
 	int [][]board;
-	int awayTag, aiTag;
+	int awayTag, homeTag;
 	int turn, logNum;
 	Scanner n;
-	boolean winchecker;
 	cor[] logs;
 	ConnectSix conSix;
 
 	public board() {
 		this.board=new int[19][19];
 		initializeBoard();
-		winchecker=false;
 		n=new Scanner(System.in);
 		logs=new cor[361];
 		logNum=0;
@@ -38,39 +36,6 @@ public class board {
 				this.board[i][j] = EMPTY;
 			}
 		}
-	}
-
-	//return false for invalid, return true for valid input
-	public boolean isValidInput(cor move1, cor move2) { 
-		int x1=move1.getX();
-		int x2=move2.getX();
-		int y1=move1.getY();
-		int y2=move2.getY();
-		if(x1<0||y1<0||x2<0||y2<0) return false;
-		else if(x1>18||y1>18||x2>18||y2>18) return false;
-		else if(this.board[x1][y1]!=0) return false;
-		else if(this.board[x2][y2]!=0) return false;
-		else return true;
-	}
-	
-	//return false for invalid, return true for valid input
-	public boolean isValidInput(cor move1) { 
-		int x1=move1.getX();
-		int y1=move1.getY();
-		if(x1<0||y1<0) return false;
-		else if(x1>18||y1>18) return false;
-		else if(this.board[x1][y1]!=0) return false;
-		else return true;
-	}
-	
-	// return false for not full, true for full board
-	public boolean isFull() { 
-		for(int i =0; i< 19; i++) {
-			for(int j=0; j<19; j++) {
-				if(this.board[i][j]==0) return false;
-			}
-		}
-		return true;
 	}
 	
 	public void printBoard() {
@@ -101,16 +66,8 @@ public class board {
 	}
 	
 	public void enterInput(cor move1, int tag_p) {
-		this.board[move1.getX()][move1.getY()]=tag_p;
+		this.board[move1.getI()][move1.getJ()]=tag_p;
 	}
-	
-	public void deleteMove(int num) {
-		for(int i =0; i<num; i++) {
-			logNum--;
-			this.board[logs[logNum].getX()][logs[logNum].getY()]=0;
-		}
-	}
-
 	
 	public ConnectSix setGame() throws ConnSixException {
 		System.out.print("Input the ip address > ");
@@ -120,10 +77,10 @@ public class board {
 		System.out.print("Input the color > ");
 		String color = n.nextLine();
 		if (color.toLowerCase().compareTo("black") == 0) {
-			aiTag = BLACK; awayTag = WHITE;
+			homeTag = BLACK; awayTag = WHITE;
 		}
 		else {
-			aiTag = WHITE; awayTag = BLACK;
+			homeTag = WHITE; awayTag = BLACK;
 		}
 		
 		ConnectSix conSix = new ConnectSix(ip, port, color);
@@ -153,15 +110,15 @@ public class board {
 	public String makeNotation(cor move1, cor move2) {
 		System.out.println("make notation " + move1);
 		System.out.println("make natation " + move2);
-		char alpha1 = (char) (move1.getY() + 'A');
+		char alpha1 = (char) (move1.getJ() + 'A');
 		if (alpha1 >= 'I') alpha1++;
-		char alpha2 = (char) (move2.getY() + 'A');
+		char alpha2 = (char) (move2.getJ() + 'A');
 		if (alpha2 >= 'I') alpha2++;
-		return String.format("%c%02d:%c%02d",alpha1, 19-move1.getX(), alpha2, 19-move2.getX());
+		return String.format("%c%02d:%c%02d",alpha1, 19-move1.getI(), alpha2, 19-move2.getI());
 	}
 	
  	public void log(cor move1) {
-		logs[logNum]=new cor(move1.getX(), move1.getY());
+		logs[logNum]=new cor(move1.getJ(), move1.getJ());
 		logNum++;
 	}
 
@@ -170,13 +127,13 @@ public class board {
 		n.close();
 		printBoard();
 		
-		if (aiTag == BLACK) {
+		if (homeTag == BLACK) {
 			String first = conSix.drawAndRead("K10");
-			this.board[9][9] = aiTag;
+			this.board[9][9] = homeTag;
 			System.out.println(first);
 			enterInput(first);
 		}
-		else if (aiTag == WHITE) {
+		else if (homeTag == WHITE) {
 			String first = conSix.drawAndRead("");
 			if (first.compareTo("K10") == 0) { enterInput(new cor(9, 9), awayTag); }
 			else { System.out.println("not k10?"); }
@@ -185,8 +142,8 @@ public class board {
 		printBoard();
 		do {
 			System.out.println(logNum);
-			//evaluate.aiTurn(this.board, this.aiTag, this.turn, this.logs, this.logNum);
-			evaluate.minimax(board, aiTag, turn, 3, this.logs, logNum);
+			//evaluate.aiTurn(this.board, this.homeTag, this.turn, this.logs, this.logNum);
+			evaluate.minimax(board, homeTag, turn, 3, this.logs, logNum);
 			System.out.println(logNum);
 			enterInput(conSix.drawAndRead(makeNotation(logs[logNum], logs[logNum+1])));
 

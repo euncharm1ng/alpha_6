@@ -1,5 +1,3 @@
-//package alpha_6;
-
 public class evaluate {
 	final static private int EMPTY = 0;
 	final static private int BLACK = 1;
@@ -9,42 +7,24 @@ public class evaluate {
 	static cor move = new cor();
 	final static int LEFTRIGHT = 0, TOPDOWN = 1, TOPLBOTR = 2, BOTLTOPR = 3, OFFENSE = 1, DEFENSE = 2;
 	static boolean DEBUG = false, PRINTINFO = false;
-	final static int[][] scoresArray1 = { { 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 },
+	final static long[][] scoresArray1 = { { 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 },
 			{ 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, { 3, 6, 11, 20 },
 			{ 97, 387, 704, 1280 }, { 24, 1549, 2816, 5120 }, { 209600, 838400, 3353600, 13414400 },
 			{ 209600, 838400, 3353600, 13414400 }, { 53, 97, 176, 320 }, { 97, 387, 704, 1280 },
-			{ 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000 },
+			{ 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000},
 			{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 },
 			{ 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
-	final static int[][] scoresArray2 = { 
+	final static long[][] scoresArray2 = { 
 			{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, 
 			{ 3, 6, 11, 20 },{ 6, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 209600, 838400, 3353600, 13414400 },{ 209600, 838400, 3353600, 13414400 }, 
 			{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 },{ 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000 },
 			{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 },{ 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
 
-	/*
-	 * final static int[][] scoresArray = { { 5, 10, 20, 35 }, { 15, 20, 30, 45 }, {
-	 * 10, 15, 25, 40 }, { 0, 0, 0, 1000 }, { 0, 0, 0, 1000 }, { 0, 0, 5, 20 }, { 0,
-	 * 5, 15, 30 }, { 10, 15, 25, 40 }, { 0, 0, 120, 200, }, { 0, 0, 0, 200 }, { 0,
-	 * 0, 80, 200 }, { 5, 10, 20, 35 }, { 0, 5, 15, 30 }, { 10, 15, 25, 40 }, { 0,
-	 * 0, 0, 2000 }, { 0, 0, 10, 25 }, { 15, 20, 30, 45 }, { 0, 5, 15, 30 }, { 0, 0,
-	 * 0, 1000 }, { 0, 0, 0, 1000 } };
-	 * 
-	 * final static int[][] scoresArray = { { 13, 24, 44, 80 }, { 24, 1549, 2816,
-	 * 5120 }, { 1549, 6195, 11264, 20480 }, { 0, 0, 0, 512000 }, { 0, 0, 0, 512000
-	 * }, { 3, 6, 11, 20 }, { 6, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 0, 0, 0,
-	 * 102400 }, { 0, 0, 0, 102400 }, { 53, 97, 176, 320 }, { 97, 387, 704, 1280 },
-	 * { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 0, 0, 0, 2048000 }, { 13,
-	 * 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 0, 0,
-	 * 0, 409600 }, { 0, 0, 0, 409600 } };
-	 */
-
-	public static void aiTurn(int[][] board, int aiTag, int turn, cor[] logs, int logNum) {
+	public static void 
+	aiTurn(int[][] board, int aiTag, int turn, cor[] logs, int logNum) {
 		System.out.println("----aiturn with tag: " + aiTag);
 		int oppoTag = opponentTag(aiTag);
 		int[][] scoreBoard = new int[19][19];
-
-		//minimax(board, aiTag, turn, depth);
 
 		initializeScoreBoard(scoreBoard);
 		readBoWDir(board, scoreBoard, aiTag, 1, OFFENSE, turn);
@@ -62,7 +42,7 @@ public class evaluate {
 		aiInput(board, scoreBoard, aiTag, logs, logNum+1);
 	}
 
-	public static int
+	public static long
 	minimax(int[][] board, int currTag, int turn, int currDepth, cor[] logs, int logNum)
 	{
 		if(currDepth <= 0) return 0;
@@ -70,13 +50,13 @@ public class evaluate {
 		cor[] topFirstMoves = new cor[width], topSecondMoves = new cor[width];
 		int[] topFirstScore = new int[width], topSecondScore = new int[width];
 		boolean bestRecorded = false;
-		int oppoTag = opponentTag(currTag), bestScore = 0, currScore = 0;
+		int oppoTag = opponentTag(currTag); 
+		long bestScore = 0, currScore = 0;
 		cor bestFirst = new cor(), bestSecond = new cor();
 		for(int i = 0; i < width; i++){ 
 			topFirstMoves[i] = new cor(); 
 			topSecondMoves[i] = new cor();
 		}
-		//System.out.println("entered minimax:: " + currDepth );
 
 		initializeScoreBoard(scoreBoard);
 		readBoWDir(board, scoreBoard, currTag, 1, OFFENSE, turn);
@@ -84,8 +64,22 @@ public class evaluate {
 
 		findTop(scoreBoard, topFirstMoves, topFirstScore);
 		for(int i = 0; i < width; i++){
-			//System.out.println("\t first moves: " + currScore);
-			board[topFirstMoves[i].getX()][topFirstMoves[i].getY()] = currTag;
+			board[topFirstMoves[i].getI()][topFirstMoves[i].getJ()] = currTag;
+			if(isWin(board, topFirstMoves[i])) {
+				System.out.println("WIN DETECTED move 1" + topFirstMoves[i] + " " + currDepth);
+
+				if (currDepth == 3){
+					System.out.println("move1 win and depth == 3");
+					int secondMove = 0;
+					if(i == 0) secondMove = 1;
+					board[topFirstMoves[secondMove].getI()][topFirstMoves[secondMove].getJ()] = currTag;
+					logs[logNum] = new cor(topFirstMoves[i].getI(), topFirstMoves[i].getJ());
+					logs[logNum+1] = new cor(topFirstMoves[secondMove].getI(), topFirstMoves[secondMove].getJ());
+					System.out.println("minimax:: " + bestFirst + " " + bestSecond + " " + bestScore);
+				}
+				else board[topFirstMoves[i].getI()][topFirstMoves[i].getJ()] = EMPTY;
+				return 10000000000L;
+			}
 			if(currDepth == 3) printBoard(board);
 			
 			initializeScoreBoard(scoreBoard);
@@ -93,40 +87,109 @@ public class evaluate {
 			readBoWDir(board, scoreBoard, oppoTag, 2, DEFENSE, turn);
 
 			for(int j = 0; j < width; j++){
-				topSecondMoves[j].x = -1;
-				topSecondMoves[j].y = -1;
+				topSecondMoves[j].i = -1;
+				topSecondMoves[j].j = -1;
 				topSecondScore[j] = 0;
 			}
 			findTop(scoreBoard, topSecondMoves, topSecondScore);
 			for(int j = 0; j < width; j++){
 				currScore = topFirstScore[i] + topSecondScore[j];
-				board[topSecondMoves[j].getX()][topSecondMoves[j].getY()] = currTag;
+				board[topSecondMoves[j].getI()][topSecondMoves[j].getJ()] = currTag;
+				if(isWin(board,topSecondMoves[j])){
+					System.out.println("WIN DETECTED move2" + topSecondMoves[j] + " " + currDepth);
+
+					if (currDepth == 3){
+						logs[logNum] = new cor(topFirstMoves[i].getI(), topFirstMoves[i].getJ());
+						logs[logNum+1] = new cor(topSecondMoves[j].getI(), topSecondMoves[j].getI());
+						System.out.println("minimax:: " + bestFirst + " " + bestSecond + " " + bestScore);
+					}
+					else board[topSecondMoves[j].getI()][topSecondMoves[j].getJ()] = EMPTY;
+					return 10000000000L;
+				}
 				currScore -= minimax(board, oppoTag, turn+1, currDepth-1, logs, logNum);
 
 				if(!bestRecorded || currScore > bestScore){ 
 					bestScore = currScore;
-					bestFirst.x = topFirstMoves[i].x;
-					bestFirst.y = topFirstMoves[i].y;
-					bestSecond.x = topSecondMoves[i].x;
-					bestSecond.y = topSecondMoves[i].y;
+					bestFirst.i = topFirstMoves[i].i;
+					bestFirst.j = topFirstMoves[i].j;
+					bestSecond.i = topSecondMoves[i].i;
+					bestSecond.j = topSecondMoves[i].j;
 					bestRecorded = true;
 				}
-				board[topSecondMoves[j].getX()][topSecondMoves[j].getY()] = EMPTY;
+				board[topSecondMoves[j].getI()][topSecondMoves[j].getJ()] = EMPTY;
 			}
-			board[topFirstMoves[i].getX()][topFirstMoves[i].getY()] = EMPTY;
+			board[topFirstMoves[i].getI()][topFirstMoves[i].getJ()] = EMPTY;
 		}
 
 		if (currDepth == 3){
-			board[bestFirst.getX()][bestFirst.getY()] = currTag;
-			board[bestSecond.getX()][bestSecond.getY()] = currTag;
-			logs[logNum] = new cor(bestFirst.getX(), bestFirst.getY());
-			logs[logNum+1] = new cor(bestSecond.getX(), bestSecond.getY());
+			board[bestFirst.getI()][bestFirst.getJ()] = currTag;
+			board[bestSecond.getI()][bestSecond.getJ()] = currTag;
+			logs[logNum] = new cor(bestFirst.getI(), bestFirst.getJ());
+			logs[logNum+1] = new cor(bestSecond.getI(), bestSecond.getJ());
 			System.out.println("minimax:: " + bestFirst + " " + bestSecond + " " + bestScore);
 		}
 		return bestScore;
 	}
 
-	public static void printBoard(int[][] board) {
+	static boolean
+	isWin(int[][] board, cor move)
+	{
+		int count = 0, homeTag = board[move.getI()][move.getJ()];
+		int moveI = move.getI(), moveJ = move.getJ();
+		System.out.println("ISWIN, home tag: " + homeTag + " " + move);
+		if(homeTag == 0) System.out.println("************SOMETHING VERY WRONG************");
+		//check horizontal
+		for(int j = moveJ; j < 19; j++){
+			if(board[moveI][j] == homeTag) count++;
+			else break;
+		}
+		for(int j = moveJ; j > -1; j--){
+			if(board[moveI][j] == homeTag) count++;
+			else break;
+		}
+		if(count > 6) return true;
+		else count = 0;
+
+		//check vertical
+		for(int i = moveI; i < 19; i++){
+			if(board[i][moveJ] == homeTag) count++;
+			else break;
+		}
+		for(int i = moveI; i > -1; i--){
+			if(board[i][moveJ] == homeTag) count++;
+			else break;
+		}
+		if(count > 6) return true;
+		else count = 0;
+
+		//check right-up diagonal
+		for(int i = moveI, j = moveJ; i < 19 && j > -1; i++, j--){
+			if(board[i][j] == homeTag) count++;
+			else break;
+		}
+		for(int i = moveI, j = moveJ; i > -1 && j < 19; i--, j++){
+			if(board[i][j] == homeTag) count++;
+			else break;
+		}
+		if(count > 6) return true;
+		else count = 0;	
+
+		//check left-up diagonal
+		for(int i = moveI, j = moveJ; i > -1 && j > -1; i--, j--){
+			if(board[i][j] == homeTag) count++;
+			else break;
+		}
+		for(int i = moveI, j = moveJ; i < 19&& j < 19; i++, j++){
+			if(board[i][j] == homeTag) count++;
+			else break;
+		}
+		if(count > 6) return true;
+		return false;
+	}
+
+	public static void 
+	printBoard(int[][] board) 
+	{
 		System.out.println("x\\y\t0 1 2 3 4 5 6 7 8 9 a 1 2 3 4 5 6 7 8");
 		for(int i =0; i< 19; i++) {
 			System.out.printf("%2d\t", i);
@@ -160,11 +223,11 @@ public class evaluate {
 						int tempScore, tempX, tempY;
 						for(k++; k < width; k++){
 							tempScore = topScore[k];
-							tempX = topMoves[k].getX();
-							tempY = topMoves[k].getY();
+							tempX = topMoves[k].getI();
+							tempY = topMoves[k].getJ();
 							topScore[k] = targetScore;
-							topMoves[k].x = targetX;
-							topMoves[k].y = targetY;
+							topMoves[k].i = targetX;
+							topMoves[k].j = targetY;
 							targetScore = tempScore;
 							targetX = tempX;
 							targetY = tempY;
@@ -222,8 +285,8 @@ public class evaluate {
 		for (int i = 0; i < 19; i++) { // left right
 			for (int j = 0; j < 19; j++) {
 				if (rawData[i][j] == userTag) {
-					move.x = i;
-					move.y = 0;
+					move.i = i;
+					move.j = 0;
 					for (j = 0; j < 19; j++) { oneRow[j] = rawData[i][j]; }
 					evaGiveScoreC1(scoreBoard, oneRow, 19, userTag, move, LEFTRIGHT, runNumber, offOrDef, turn);
 					break;
@@ -234,8 +297,8 @@ public class evaluate {
 		for (int i = 0; i < 19; i++) { // top down
 			for (int j = 0; j < 19; j++) {
 				if (rawData[j][i] == userTag) {
-					move.x = 0;
-					move.y = i;
+					move.i = 0;
+					move.j = i;
 					for (j = 0; j < 19; j++) { oneRow[j] = rawData[j][i]; }
 					evaGiveScoreC1(scoreBoard, oneRow, 19, userTag, move, TOPDOWN, runNumber, offOrDef, turn);
 					break;
@@ -247,8 +310,8 @@ public class evaluate {
 			k = i;
 			for (int j = 0; j < 19 - i; j++) {
 				if (rawData[k][j] == userTag) {
-					move.x = i;
-					move.y = 0;
+					move.i = i;
+					move.j = 0;
 					k = i;
 					for (j = 0; j < 19 - i; j++) {
 						oneRow[j] = rawData[k][j];
@@ -264,8 +327,8 @@ public class evaluate {
 			k = 0;
 			for (int j = i; j < 19; j++) {
 				if (rawData[k][j] == userTag) {
-					move.x = 0;
-					move.y = i;
+					move.i = 0;
+					move.j = i;
 					k = 0;
 					for (j = i; j < 19; j++) {
 						oneRow[k] = rawData[k][j];
@@ -282,8 +345,8 @@ public class evaluate {
 			k = i;
 			for (int j = 0; j < i; j++) {
 				if (rawData[k][j] == userTag) {
-					move.x = i;
-					move.y = 0;
+					move.i = i;
+					move.j = 0;
 					k = i;
 					for (j = 0; j < i; j++) {
 						oneRow[j] = rawData[k][j];
@@ -299,8 +362,8 @@ public class evaluate {
 			k = 18;
 			for (int j = i; j < 18; j++) {
 				if (rawData[k][j] == userTag) {
-					move.x = 18;
-					move.y = i;
+					move.i = 18;
+					move.j = i;
 					k = 18;
 					int pos = 0;
 					for (j = i; j < 18; j++) {
@@ -321,7 +384,7 @@ public class evaluate {
 	evaGiveScoreC1(int[][] scoreBoard, int dummycell[], int onerawdatalen, int userTag, cor move,
 			int direction, int runNumber, int offOrDef, int turn) 
 	{
-		int[] one_rawData = new int[onerawdatalen];
+		long[] one_rawData = new long[onerawdatalen];
 		int first_notusertag = -1, gab_notusertag = 0; // dummycell을 살펴볼 때 만약 notusertag가 있다면 위치를 기억하기 위한 수
 		int oppoTag = opponentTag(userTag);
 		int pos = 0, stoStart = -1, frontGap = 0, btwGap = 0, count1 = 0, count2 = 0, count2Start = -1, backGap = 0;
@@ -329,7 +392,7 @@ public class evaluate {
 
 		if(PRINTINFO) {
 			System.out.println("debug——— for : " + userTag);
-			System.out.println("dir: " + direction + " | pos x: " + move.x + " | pos y: " + move.y);
+			System.out.println("dir: " + direction + " | pos x: " + move.i + " | pos y: " + move.j);
 			for (int i = 0; i < onerawdatalen; i++) {
 				System.out.printf("%d ", dummycell[i]);
 			}
@@ -531,7 +594,7 @@ public class evaluate {
 		}
 		if(length_lastCase == 6) {
 			if(PRINTINFO) System.out.println("됐다!!!!");
-			int[][] scoresArray_forSpecial;
+			long[][] scoresArray_forSpecial;
 			if(turn<4) 
 				scoresArray_forSpecial=scoresArray1;
 			else
@@ -560,26 +623,26 @@ public class evaluate {
 		switch (direction) {
 		case LEFTRIGHT: // left to right
 			for (int i = 0; i < 19; i++) {
-				scoreBoard[move.x][i] += one_rawData[i];// one_rawScore[i];
+				scoreBoard[move.i][i] += one_rawData[i];// one_rawScore[i];
 			}
 			break;
 		case TOPDOWN: // top down
 			for (int i = 0; i < 19; i++) {
-				scoreBoard[i][move.y] += one_rawData[i];// one_rawScore[i];
+				scoreBoard[i][move.j] += one_rawData[i];// one_rawScore[i];
 			}
 			break;
 		case TOPLBOTR: // TOP L TO BOT R
 			for (int i = 0; i < onerawdatalen; i++) {
-				scoreBoard[move.x][move.y] += one_rawData[i];// one_rawScore[i];
-				move.x++;
-				move.y++;
+				scoreBoard[move.i][move.j] += one_rawData[i];// one_rawScore[i];
+				move.i++;
+				move.j++;
 			}
 			break;
 		case BOTLTOPR: // BOT L TO TOP R
 			for (int i = 0; i < onerawdatalen; i++) {
-				scoreBoard[move.x][move.y] += one_rawData[i];// one_rawScore[i];
-				move.x--;
-				move.y++;
+				scoreBoard[move.i][move.j] += one_rawData[i];// one_rawScore[i];
+				move.i--;
+				move.j++;
 			}
 			break;
 		default:
@@ -607,14 +670,15 @@ public class evaluate {
 			return 1;
 	}
 
-	public static void giveScore(int[] one_rawData, int frontGap, int count1, int btwGap, int count2, int backGap,
+	public static void giveScore(long[] one_rawData, int frontGap, int count1, int btwGap, int count2, int backGap,
 			int pos, boolean blocked, boolean backBlocked, int runNumber, int offOrDef, int turn) {
-		int[][] scoresArray;
+		long[][] scoresArray;
 		if (turn < 6)
 			scoresArray = scoresArray1;
 		else
 			scoresArray = scoresArray2;
-		int scoreArrayAdd = 0, temp = 0;
+		int scoreArrayAdd = 0;
+		long temp = 0;
 		if (runNumber == 1 && offOrDef == OFFENSE)
 			scoreArrayAdd = 0;
 		else if (runNumber == 1 && offOrDef == DEFENSE)
