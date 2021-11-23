@@ -723,7 +723,7 @@ public class evaluate { //
 				// if (!backBlocked||count1+count2>=4) {
 				count1 += count2;
 				if(count1 >5)
-						count1 = 5; //여기서 count1 + count2 가 5를 넘어가는 경우가 있음 예를 들어 x x x 0 0 O O O일 때 그래서 그냥 5로 맞춰줌.
+						count1 = 5; //여기서 count1 + count2 가 5를 넘어가는 경우가 있음 예를 들어 x x x 0 0 O O O일 때 그래서 그냥 5로 맞춰 11.23. 19:55
 				for (int i = 0; i < btwGap; i++) {
 					System.out.println("scor + co " +scoreArrayAdd+ " " + count1);
 					temp = scoresArray[scoreArrayAdd + count1 - 1][3];
@@ -765,6 +765,80 @@ public class evaluate { //
 		 * + btwGap); }
 		 */
 	}
+	
+	public static int chkDummyCell(int[] dummycell,int onerawdatalen, int userTag) { //6개가 연속으로 되는지 확인하는 함수 11.23
+		//dummycell을 받아서 계
+		int overSix=0;
+		for(int i=0; i<onerawdatalen;i++) {
+			if(dummycell[i] == userTag) {
+				overSix++;
+			}else {
+				overSix=0;
+			}
+		}
+		
+		return overSix; //이걸 받을 때는 overSix가 6보다 클 때 true라고 하면서 6개가 되는지 확인 할 수 있다.
+	}
+	/*
+	int 
+	Mini::chkVic(short** board, Move mov1, Move mov2) 
+	{
+	    int count = 0;
+	    short color = board[mov1.y][mov1.x];
+	    int movX = mov1.x, movY = mov1.y;
+	    for(int loopCnt = 0; loopCnt < 2; loopCnt++){
+	        if(loopCnt == 1){
+	            movX = mov2.x;
+	            movY = mov2.y;
+	        }
+	        //check horizontal
+	        for (int j = movX; j < 19 ; j++) {
+	            if (board[movY][j] == color) count++;
+	            else break;
+	        }
+	        for (int j = movX; j > -1; j--) {
+	            if (board[movY][j] == color) count++;
+	            else break;
+	        }
+	        if (count > 6) return color;
+	        count = 0;
+	        //check ertical 
+	        for (int i = movY; i < 19; i++) {
+	            if (board[i][movX] == color) count++;
+	            else break;
+	        }
+	        for (int i = movY; i > -1 ; i--) {
+	            if (board[i][movX] == color) count++;
+	            else break;
+	        }
+	        if (count > 6) return color;
+	        count = 0;
+	        //check right-up diagonal
+	        for (int i = movY, j = movX; i < 19 && j > -1 ; i++, j--) {
+	            if (board[i][j] == color) count++;
+	            else break;
+	        }
+	        for (int i = movY, j = movX; i > -1 && j < 19 ; i--, j++) {
+	            if (board[i][j] == color) count++;
+	            else break;
+	        }
+	        if (count > 6) return color;
+	        count = 0;
+	        //check left-up diagonal
+	        for (int i = movY, j = movX; i > -1 && j > -1; i--, j--) {
+	            if (board[i][j] == color) count++;
+	            else break;
+	        }
+	        for (int i = movY, j = movX; i < 19 && j < 19 ; i++, j++) {
+	            if (board[i][j] == color) count++;
+	            else break;
+	        }
+	        if (count > 6) return color;
+	        count = 0;
+	    }
+	    return 0;
+	}// end of chkVic()
+	*/
 }
 
 //막힌게 2칸 떨어져있으면 반대편 /4.5 3칸 떨어져있으면 그대
