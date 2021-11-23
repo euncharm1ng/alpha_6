@@ -32,12 +32,15 @@ public class evaluate {
 		initializeScoreBoard(scoreBoard);
 		readBoWDir(board, scoreBoard, aiTag, 1, OFFENSE, turn);
 		readBoWDir(board, scoreBoard, oppoTag, 1, DEFENSE, turn);
-
-		if (DEBUG) printDebug(scoreBoard);
-		aiInput(board, scoreBoard, aiTag, logs, logNum);
-
-		if(DEBUG) System.out.println("-----------------------------------move2------------------------------------------");
+		// find location with highest point
+		// enter input
+		if (DEBUG)
+			printDebug(scoreBoard);
+		logNum = aiInput(board, scoreBoard, aiTag, logs, logNum);
 		initializeScoreBoard(scoreBoard);
+
+		if(DEBUG) 
+			System.out.println("-----------------------------------move2------------------------------------------");
 		readBoWDir(board, scoreBoard, aiTag, 2, OFFENSE, turn);
 		readBoWDir(board, scoreBoard, oppoTag, 2, DEFENSE, turn);
 
@@ -302,9 +305,18 @@ public class evaluate {
 		}
 	}
 
-	static void aiInput(int[][] board, int[][] scoreBoard, int aiTag, cor[] logs, int logNum) {
+	static int aiInput(int[][] board, int[][] scoreBoard, int aiTag, cor[] logs, int logNum) {
+		// 여기서부터는 점수입력 받은 걸로 입력해야함.
+		// int[][] checkscore = new int[19][19]; //board 복사하기 위한 board.
 		int high_i = 0, high_j = 0;
 		int high_score = 0;
+		/**
+		 * board에서 checkboard로 복사하기
+		 */
+		/*
+		 * for(int i = 0; i< 19; i++) { for(int j = 0; j< 19; j++) { checkscore[i][j] =
+		 * scoreBoard[i][j]; } }
+		 */
 
 		for (int i = 0; i < 19; i++) {
 			for (int j = 0; j < 19; j++) {
@@ -316,13 +328,14 @@ public class evaluate {
 			}
 		}
 		logs[logNum] = new cor(high_i, high_j);
+		logNum++;
 
 		board[high_i][high_j] = aiTag;
 
-		if(PRINTINFO) System.out.println("Input aiTag x" + high_i + ", y" + high_j + ".");
-		if(PRINTINFO) System.out.println();
+		System.out.println("Input aiTag x" + high_i + ", y" + high_j + ".");
+		System.out.println();
+		return logNum;
 	}
-	
 	/*
 	 * read board left to right, top to bottom, left top to right bottom, left
 	 * bottom to right top if there is a stone, hand direction, cor of the beginning
@@ -330,14 +343,15 @@ public class evaluate {
 	 * start from (0,0) except left bottom to right top which starts from (18,0)
 	 * (0,0) being left top corner; (18,0) being left bottom
 	 */
-	public static void 
-	readBoWDir(int[][] rawData, int[][] scoreBoard, int userTag, int runNumber, int offOrDef, int turn) 
-	{
+
+	public static void readBoWDir(int[][] rawData, int[][] scoreBoard, int userTag, int runNumber, int offOrDef,
+			int turn) {
 		int k = 0;
 		int[] oneRow = new int[19];
 
 		for (int i = 0; i < 19; i++) { // left right
 			for (int j = 0; j < 19; j++) {
+				// if(rawData[j][i]!=0&&rawData[j][i]!=3) {
 				if (rawData[i][j] == userTag) {
 					move.i = i;
 					move.j = 0;
@@ -350,6 +364,7 @@ public class evaluate {
 
 		for (int i = 0; i < 19; i++) { // top down
 			for (int j = 0; j < 19; j++) {
+				// if(rawData[i][j]!=0&&rawData[i][j]!=3) {
 				if (rawData[j][i] == userTag) {
 					move.i = 0;
 					move.j = i;
@@ -363,6 +378,7 @@ public class evaluate {
 		for (int i = 0; i < 14; i++) {// top left to right bottom, top left to top right
 			k = i;
 			for (int j = 0; j < 19 - i; j++) {
+				// if(rawData[k][j]!=0&&rawData[k][j]!=3) {
 				if (rawData[k][j] == userTag) {
 					move.i = i;
 					move.j = 0;
@@ -380,6 +396,7 @@ public class evaluate {
 		for (int i = 1; i < 14; i++) {// top left to right bottom, left top to left down
 			k = 0;
 			for (int j = i; j < 19; j++) {
+				// if(rawData[k][j]!=0&&rawData[k][j]!=3) {
 				if (rawData[k][j] == userTag) {
 					move.i = 0;
 					move.j = i;
@@ -398,6 +415,7 @@ public class evaluate {
 		for (int i = 18; i > 4; i--) {// top right to left bottom, top right to top left
 			k = i;
 			for (int j = 0; j < i; j++) {
+				// if(rawData[k][j]!=0&&rawData[k][j]!=3) {
 				if (rawData[k][j] == userTag) {
 					move.i = i;
 					move.j = 0;
@@ -415,6 +433,7 @@ public class evaluate {
 		for (int i = 1; i < 14; i++) {// top right to left bottom, right top to right bottom
 			k = 18;
 			for (int j = i; j < 18; j++) {
+				// if(rawData[k][j]!=0&&rawData[k][j]!=3) {
 				if (rawData[k][j] == userTag) {
 					move.i = 18;
 					move.j = i;
@@ -425,12 +444,13 @@ public class evaluate {
 						k--;
 						pos++;
 					}
-					evaGiveScoreC1(scoreBoard, oneRow, 19 - i, userTag, move, BOTLTOPR, runNumber, offOrDef, turn);
+					evaGiveScoreC1(scoreBoard, oneRow, 18 - i, userTag, move, BOTLTOPR, runNumber, offOrDef, turn);
 					break;
 				}
 				k--;
 			}
 		}
+
 		return;
 	}
 	
@@ -452,7 +472,15 @@ public class evaluate {
 			}
 			System.out.println();
 		}
+		System.out.println();
 
+		/*
+		 * convert dead area to oppotag
+		 */
+		/*
+		 * for (int i = 0; i < onerawdatalen; i++) { // 받아온 데이터를 dummycell 로 옮긴다.
+		 * dummycell[i] = one_rawData[i]; }
+		 */
 		for (int i = 0; i < onerawdatalen; i++) {
 			if (dummycell[i] == 3)
 				dummycell[i] = oppoTag;
@@ -479,27 +507,76 @@ public class evaluate {
 			}
 		} // end convert dead
 
-		if(PRINTINFO){
-			System.out.print("dummies:");
-			for (int k = 0; k < onerawdatalen; k++) {
-				System.out.print(dummycell[k] + " ");
-			}
-			System.out.println();
+		/*
+		 * segment usertag,,
+		 * diagnosis--------------------------------------------------------------
+		 */
+		System.out.print("dummies:");
+		for (int k = 0; k < onerawdatalen; k++) {
+			System.out.print(dummycell[k] + " ");
 		}
+		System.out.println();
+		// 만약에 아군 돌들 사이에 장애물이 없다면 시작과 끝은 데려와서 1-1-11의 케이스를 확인할 수 있도록
 		
 		int[] lastCaseInfoList = new int[10];
 		int isConnected = 0;
+		/*
+		 * 차례대로 pos_1, count1_1, btwgap_1, count2_1, btwgap_2, count2_2
+		 * 예를 들어 0 0 0 0 0 0 X 0 X 0 X X 0 0 0 ... 라고 해보자
+		 * 그렇다면 pos_1 은 6, 
+		 * 아래 while 반복문을 돌리면 debug가 다음과 같이 나온다.
+		 * case connected frontGap 6 count1 1 btwGap 1 count2 1 X 0 X ...
+		 * case connected frontGap 0 count1 1 btwGap 1 count2 2 .. X 0 X X ..
+		 * case blocked
+		 * 
+		 * 따라서 count1_1 = 1 , bywgap_1 =1 , count2 = 1, btwGap_2 = 1, count2_2 =2 라고 할 수 있다.
+		 * 여기서 pos_1을 제외하고 나머지의 값들의 합이 6 이상이고, btwGap들의 합이 2일 때가 X 0 X 0 X X 류의 케이스라고 판단.
+		 * 사실 X X 0 X 0 X X 0 X 등등 이렇게 나오면 당연히 막을 수 있다. 엇 아닌가 2 1 2... 이거 생각보다 점수가 작게 될지도.. -> 아님 잘 될 것 같
+		 * 
+		 * 맨 처음 X 0 X 0 X 같은 경우에는 안됨 그렇지만 그 뒤에 X 0 X 0 X X 같은 경우에는 된다. 그렇기 때문에 이 경우도 생각해주어야 한다.
+		 * connected 가 나온다면 바로 isConnected 변수가 1증가한다. 그렇다면 isConnected가 0이 아니라면 lastCaseInfoList[0] = pos, 
+		 * lastCaseInfoList[1] = count1_1, lastCaseInfoList[2] = btwgap_1, lastCaseInfoList[3] = count2_1 이 들어간다.
+		 * 
+		 * 그리고 한 번 더 돌렸는데 connected가 된다면? 그러면 1이 증가하면서 isConnected 가 2가 될 것이다. 그러면 lastCaseInfoList[4] = count1_2,
+		 * lastCaseInfoList[5] = btwgap_2, lastCaseInfoList[6] = count2_2 가 들어가도록한다.@
+		 *  -> 여기서 isConnected가 2 이하일 때만 입력이 되도록 한다. 만약 2가 다 채워졌고, 합이 6이상이라 isconnected가 1로 내려가지 않으면 connected가 한 번 더
+		 *  되면 isConnected가 3이 된다. 그러면 사실 이건 못 막는다. 혹은 앞에서 한 번 막고 그 다음에 다시 막아야한다.
+		 * 
+		 * 그렇다면 한 번 더 돌렸는데 connected가 아니라면? 그러면 isConnected가 다시 0이 되게한다.따라서 한번 while구문이 돌았을 때
+		 *  isConnected가 0이라면 lastCaseInfoList를 모두 초기화 한다.@
+		 *  
+		 *  그렇다면 X 0 X 0 X 0 X X  는 어떻게 알까?
+		 *  위는 connected가 연속 3번 이상이 될 때를 말하는 것이다. 그렇다면 2번 연속이 될 때 한번 걸러준다. lastCaseInfoList[1~3,5,6]을 합했을 때 6이상인가를 확인.
+		 *  만약 6 이상이 되지 않는다면? 또 btwgap이 각각 1이 아니라면?(이것 같은 경우에는 X X 0 0 X X 를 뜻하는건데, 그냥도 잘 된다) 그렇다면 그건 딱히 필요없는 정보들이다. 
+		 *  따라서 position 값인 lastCaseInfoList[0]에 count1 + btwgap을 하면 다음의 Position으로 설정 가능.
+		 *  
+		 *  그 뒤 [1] = [4] , [2] = [5], [3] = [6] 으로 바꾼다. 그러면 앞전에 정보는 버리게 되고 다음 것을 받을 준비를 할 수 있게 되는 것이다. 
+		 *  이때 중요한 점은 [4],[5],[6] 부분은 0으로 꼭 만들어줘야 한다. 그리고 isConnected는 1로 바꾼다.@
+
+		 *  
+		 *  그러면 이 while 이 다 돌고 나왔을 때 판단을 해보자.
+		 *  
+		 *  만약 isConnected가 2라면 이제 점수를 추가해준다. 
+		 *  one_dataRaw[pos+count1_1] 
+		 *  one_dataRaw[pos+count1_1+btwgap1 + count2_1] 에 점수를 추가 해준다.
+		 *  
+		 *  그 점수는 가장 큰 점수를 넣는다. 
+		 *  
+		 */
+		
+		
 	
 		while (pos < onerawdatalen) {
 			int temp;
 			if ((temp = dummycell[pos]) == oppoTag) {
 				if (conti) {
+					// (for special case)
 					if(isConnected!= 2) { //2개라면 건드리지 말아야함!
 						isConnected = 0; // connected가 아닌 것이 나올 때는 연속된 connected가 아니기에 0으로 리셋.
 						lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
 					}
 					
-					if(PRINTINFO) System.out.println("blocked directly " + frontGap + " " + count1 + " " + btwGap);
+					System.out.println("blocked directly " + frontGap + " " + count1 + " " + btwGap);
 					blocked = true;
 					giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked, backBlocked,
 							runNumber, offOrDef, turn); // blocked
@@ -518,51 +595,78 @@ public class evaluate {
 					btwGap++;
 					for (int j = 1; j < 4; j++) {
 						if (pos + j >= onerawdatalen) {
+							//(for special case)
+//							if(isConnected!= 2) { //2개라면 건드리지 말아야함!
+//								isConnected = 0; // connected가 아닌 것이 나올 때는 연속된 connected가 아니기에 0으로 리셋.
+//								lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
+//							}
+//							
 							
-							if(PRINTINFO) System.out.println("end of line");
+							System.out.println("end of line");
 							blocked = true;
 							break;
 						} else if (dummycell[pos + j] == oppoTag) {
+							//(for special case)
+//							if(isConnected!= 2) { //2개라면 건드리지 말아야함!
+//								isConnected = 0; // connected가 아닌 것이 나올 때는 연속된 connected가 아니기에 0으로 리셋.
+//								lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
+//							}
 							
-							if(PRINTINFO) System.out.println("blocked!");
+							System.out.println("blocked!");
 							blocked = true;
 							break;
 						} else if (dummycell[pos + j] == userTag) {
+							//(for special case)
+//							if(isConnected!= 2) { //2개라면 건드리지 말아야함!
+//								isConnected = 0; // connected가 아닌 것이 나올 때는 연속된 connected가 아니기에 0으로 리셋.
+//								lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
+//							}
 							break;
 						} else {
 							btwGap++;
 						}
 					}
-					if(PRINTINFO) System.out.println("btwgap==" + btwGap);
+					System.out.println("btwgap==" + btwGap);
 					if (btwGap == 4) {
+						// (for special case)
 						if(isConnected!= 2) { //2개라면 건드리지 말아야함!
 							isConnected = 0; // connected가 아닌 것이 나올 때는 연속된 connected가 아니기에 0으로 리셋.
 							lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
 						}
 						
-						if(PRINTINFO) System.out.println("case isolated " + frontGap + " " + count1);
-						if(PRINTINFO) System.out.println("case isolated " + stoStart);
+						System.out.println("case isolated " + frontGap + " " + count1);
+						System.out.println("case isolated " + stoStart);
 						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked,
 								backBlocked, runNumber, offOrDef, turn);
+						// 여기서도 iso라고 밝히고 점수를 줘야
 					} else if (blocked) {
+						// (for special case)
 						if(isConnected!= 2) { //2개라면 건드리지 말아야함!
 							isConnected = 0; // connected가 아닌 것이 나올 때는 연속된 connected가 아니기에 0으로 리셋.
 							lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
 						}
 						
-						if(PRINTINFO) System.out.println("case blocked stoStart " + stoStart);
-						if(PRINTINFO) System.out.println("case blocked " + frontGap + " " + count1 + " " + btwGap);
-						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked, backBlocked, runNumber, offOrDef, turn);
+						System.out.println("case blocked stoStart " + stoStart);
+						System.out.println("case blocked " + frontGap + " " + count1 + " " + btwGap);
+						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked,
+								backBlocked, runNumber, offOrDef, turn);
+						// blocked 밝히고 btwGap이 뒤에 공간이라고 넘기고 계산
 					} else if (btwGap < 4) { // count2가 있다고 생각하는 case
+						// frontGap count1 gap count2 --> score
+						
+						//(for special case)
 						isConnected += 1; // 이 때 case가 connected가 발생하는 경우이다. 따라서 isConnected를 1올린다.
+						
 						pos += btwGap;
 						count2Start = pos;
 						while (pos < onerawdatalen && dummycell[pos] == userTag) {// i pointing at the space behind the
+																					// stone after the loop,
+							// may be 0 or oppo or 3
 							count2++;
 							pos++;
 						}
 						for (int i = 0; i < 2; i++) {
-							if (pos + i >= onerawdatalen)
+							if (pos + i > onerawdatalen-1) //여기 -1추가함 11.23 화요일 19:38
 								break;
 							else if (dummycell[pos + i] == 0)
 								backGap++;
@@ -572,47 +676,86 @@ public class evaluate {
 
 						pos--;
 						
-						if(PRINTINFO) System.out.println( "case connected " + frontGap + " " + count1 + " " + btwGap + " " + count2 + " ");
-						if(PRINTINFO) System.out.println("case connected stoStart " + stoStart);
+						System.out.println(
+								"case connected " + frontGap + " " + count1 + " " + btwGap + " " + count2 + " ");
+						System.out.println("case connected stoStart " + stoStart);
 						
-						if(isConnected ==1) {  lastCaseInfoList[0] = stoStart; }
+						//(for special case)
+						//isConnected가 1이라는 소리는 connected가 첫번째로 나왔다는 소리. 따라서 [0]에 stoStart를 넣어줘서 어디서 시작인지 넣어둔다.
+						if(isConnected ==1) {  
+							lastCaseInfoList[0] = stoStart; 
+						}
+						//1일 때는 index 1,2,3에 정보를 넣고, 2일 때는 4,5,6에 넣는다.
+						//isConnected는 무조건 1이상이므로 마이너스가 나올 수 없다.
 						lastCaseInfoList[(isConnected-1)*3+1] = count1;
 						lastCaseInfoList[(isConnected-1)*3+2] = btwGap;
 						lastCaseInfoList[(isConnected-1)*3+3] = count2;
 						
 						if(isConnected == 2) {
 							int confirm_special_sum =0; //lastCaseInfoList에 있는 값들을 합쳐서 6이상이 되면, 필요한 값이다.
-							for(int c_i = 1; c_i <7; c_i++) { confirm_special_sum +=lastCaseInfoList[c_i]; }
+							for(int c_i = 1; c_i <7; c_i++) {
+								confirm_special_sum +=lastCaseInfoList[c_i];
+							}
 							confirm_special_sum -= lastCaseInfoList[3];
+							//여기까지 하면 count1_1, btwgap_1, count2_1, btwgap_2, count2_2의 값을 다 더 한 것이라 볼 수 있다.
 							
 							if(confirm_special_sum > 5 && lastCaseInfoList[2] == 1 && lastCaseInfoList[5] == 1) {
-								if(PRINTINFO) System.out.println("Last case : 잘 들어감!");
+								System.out.println("Last case : 잘 들어감!");
 							}else {
+								/*
+								만약 6이상이 아니거나, btwgap이 각각 1이 아니라면 딱히 필요 없는 값들인것이다. 왜냐하면 X 0 0 0 X 0 0 0 0 X 도 합쳤을 때 
+								6이상이 되는데 필요한 값이 아니다. 만약 X 0 X 0 0 X X 라면? 물론 충분히 위협적이지만 바로 끝낼 수 있는 값이 아님. 다른 case로 무마 가능.
+								따라서 btwgap이 모두 1로 설정한다.
+								결론적으로, 첫 번째 connected 정보를 지우고 두번째 connected 정보를 앞으로 바꾼다. 
+								X 0 X 0 X 0 X X 를 예로 생각해보면 처음엔 X 0 X 0 X 로 합이 5가 되면서 필요없는 정보가 돼버림. 따라서 두번째 정보를 앞으로 옮겨서 X 0 X 0 X X를 계산.
+								*/
+//								따라서 position 값인 lastCaseInfoList[0]에 count1 + btwgap을 하면 다음의 Position으로 설정 가능.
 								int temp_a, temp_b, temp_c, temp_d=0;
 								temp_a = lastCaseInfoList[0] + lastCaseInfoList[1] + lastCaseInfoList[2]; 
+								//첫 번째 position + count1_1 + btwgap_1 = 두 번째 position
+								
 								temp_b = lastCaseInfoList[4]; // count1_2
 								temp_c = lastCaseInfoList[5]; //btwgap_2
 								temp_d = lastCaseInfoList[6]; // count2_2
+								
 								lastCaseInfoList = new int[10]; // 이렇게 해도 되는지 모르겠지만 초기화 해준 것이다.
+								
+								//이제 다시 넣어준다.
 								lastCaseInfoList[0] = temp_a;
 								lastCaseInfoList[1] = temp_b;
 								lastCaseInfoList[2] = temp_c;
 								lastCaseInfoList[3] = temp_d;
-								if(PRINTINFO) System.out.println("여기 확인 하는거임!!!!!!!!!!!!!!!" +lastCaseInfoList[0] + lastCaseInfoList[1] + lastCaseInfoList[2] +lastCaseInfoList[3]);
+								System.out.println("여기 확인 하는거임!!!!!!!!!!!!!!!" +lastCaseInfoList[0] + lastCaseInfoList[1] + lastCaseInfoList[2] +lastCaseInfoList[3]);
+								//이렇게 되면 connected는 하나만 있는 것과 동일하므로 isConnected를 1로 바꿔준다.
 								isConnected = 1;
+								
 							}
 						}
-						if(PRINTINFO){
-							System.out.print("this is lastCaseInfo:  ");
-							for(int i=0; i<lastCaseInfoList.length; i++) {
-								System.out.print(lastCaseInfoList[i]+" ");
-							}
-							System.out.println();
+						System.out.print("this is lastCaseInfo:  ");
+						for(int i=0; i<lastCaseInfoList.length; i++) {
+							System.out.print(lastCaseInfoList[i]+" ");
 						}
-						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked, backBlocked, runNumber, offOrDef, turn);
+						System.out.println();
+						
+						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked,
+								backBlocked, runNumber, offOrDef, turn);
+						
+						
+						
+						
+					
+						
+						
+						// 여기서 frontgap count1 btwgap count2로 점수를 처리하고 btwgap을 frontgap으로, count2을
+						// count1로 돌리면 그게 다음 돌들의 info가 된다.
+						// 그리고 그렇게 해서 frontgap에 점수를 넣을려고 하는데 있으면 안넣고 페스하면 된다. 그게 벽으로막혀있는 게 아니기때문에 점수를 짜게
+						// 줄 필요가 없다.
 					} else
 						System.out.println("bug2");
-					if (count2 == 0) conti = false;
+					// check if there is stone within 3 blocks, no then isolated, yes then count
+					// them too
+					if (count2 == 0)
+						conti = false;
 					btwGap = 0;
 					blocked = false;
 					frontGap = 0;
@@ -625,21 +768,30 @@ public class evaluate {
 					frontGap++;
 				}
 			} else if (temp == userTag) {
-				if (stoStart == -1) stoStart = pos;
+				if (stoStart == -1)
+					stoStart = pos;
 				conti = true;
 				count1++;
 			}
 			pos++;
 		} // while loop end
-
-		if(PRINTINFO){
-			System.out.println("!!!!!!!!length!!!!!!" + lastCaseInfoList.length);
-			System.out.print("this is lastCaseInfo:  ");
-			for(int i=0; i<lastCaseInfoList.length; i++) {
-				System.out.print(lastCaseInfoList[i]+" ");
-			}
-			System.out.println();
+		
+//		그러면 이 while 이 다 돌고 나왔을 때 판단을 해보자.
+//		 *  
+//		 *  만약 isConnected가 2라면 이제 점수를 추가해준다. 
+//		 *  one_dataRaw[stoStart+count1_1] 
+//		 *  one_dataRaw[stoStart+count1_1+btwgap1 + count2_1] 에 점수를 추가 해준다.
+//		 *  
+//		 *  그 점수는 가장 큰 점수를 넣는다.
+		
+		//for special case
+		// 어디에 무엇이 들어갈지 알았음. 그러면 점수를 넣어보자.
+		System.out.println("!!!!!!!!length!!!!!!" + lastCaseInfoList.length);
+		System.out.print("this is lastCaseInfo:  ");
+		for(int i=0; i<lastCaseInfoList.length; i++) {
+			System.out.print(lastCaseInfoList[i]+" ");
 		}
+		System.out.println();
 		
 		int length_lastCase=0;
 		for(int pl =1; pl < lastCaseInfoList.length; pl++) {
@@ -666,25 +818,28 @@ public class evaluate {
 			one_rawData[lastCaseInfoList[0] + lastCaseInfoList[1] + lastCaseInfoList[2] + lastCaseInfoList[3]] += scoresArray_forSpecial[scoreArrayAdd+4][3];
 			
 		}
-		if(PRINTINFO){
-			System.out.print("this is one_rawdata:  ");
-			for(int i=0; i<onerawdatalen; i++) {
-				System.out.print(one_rawData[i]+" ");
-			}
-			System.out.println();
+		
+		System.out.print("this is one_rawdata:  ");
+		for(int i=0; i<onerawdatalen; i++) {
+			System.out.print(one_rawData[i]+" ");
 		}
+		System.out.println();
 
-		switch (direction) {
+		switch (direction)
+
+		{
 		case LEFTRIGHT: // left to right
 			for (int i = 0; i < 19; i++) {
 				scoreBoard[move.i][i] += one_rawData[i];// one_rawScore[i];
 			}
 			break;
+
 		case TOPDOWN: // top down
 			for (int i = 0; i < 19; i++) {
 				scoreBoard[i][move.j] += one_rawData[i];// one_rawScore[i];
 			}
 			break;
+
 		case TOPLBOTR: // TOP L TO BOT R
 			for (int i = 0; i < onerawdatalen; i++) {
 				scoreBoard[move.i][move.j] += one_rawData[i];// one_rawScore[i];
@@ -692,6 +847,7 @@ public class evaluate {
 				move.j++;
 			}
 			break;
+
 		case BOTLTOPR: // BOT L TO TOP R
 			for (int i = 0; i < onerawdatalen; i++) {
 				scoreBoard[move.i][move.j] += one_rawData[i];// one_rawScore[i];
@@ -699,11 +855,14 @@ public class evaluate {
 				move.j++;
 			}
 			break;
+
 		default:
 			break;
 		}// end of switch
-	}
 
+		
+
+	}
 	public static void printDebug(int[][] scoreBoard) {
 		System.out.println(
 				"||x\\y\t   0    1    2    3    4    5    6    7    8    9    a    1    2    3    4    5    6    7    8");
@@ -749,7 +908,6 @@ public class evaluate {
 		if (DEBUG)
 			System.out.println("--debug--givascore frontgap: " + scoreArrayAdd + " " + count1);
 		for (int i = 0; i < frontGap; i++) {
-			if(PRINTINFO) System.out.println(scoreArrayAdd +" " + count1 + " " +i);
 			temp = scoresArray[scoreArrayAdd + count1 - 1][i];
 			if (btwGap < 3 && blocked) {
 				temp /= 4.5;
@@ -789,7 +947,10 @@ public class evaluate {
 				// defense no need to differentiate
 				// if (!backBlocked||count1+count2>=4) {
 				count1 += count2;
+				if(count1 >5)
+						count1 = 5; //여기서 count1 + count2 가 5를 넘어가는 경우가 있음 예를 들어 x x x 0 0 O O O일 때 그래서 그냥 5로 맞춰 11.23. 19:55
 				for (int i = 0; i < btwGap; i++) {
+					System.out.println("scor + co " +scoreArrayAdd+ " " + count1);
 					temp = scoresArray[scoreArrayAdd + count1 - 1][3];
 					if (frontGap < 3 || backBlocked)
 						temp /= 4.5;
@@ -829,6 +990,80 @@ public class evaluate {
 		 * + btwGap); }
 		 */
 	}
+	
+	public static int chkDummyCell(int[] dummycell,int onerawdatalen, int userTag) { //6개가 연속으로 되는지 확인하는 함수 11.23
+		//dummycell을 받아서 계
+		int overSix=0;
+		for(int i=0; i<onerawdatalen;i++) {
+			if(dummycell[i] == userTag) {
+				overSix++;
+			}else {
+				overSix=0;
+			}
+		}
+		
+		return overSix; //이걸 받을 때는 overSix가 6보다 클 때 true라고 하면서 6개가 되는지 확인 할 수 있다.
+	}
+	/*
+	int 
+	Mini::chkVic(short** board, Move mov1, Move mov2) 
+	{
+	    int count = 0;
+	    short color = board[mov1.y][mov1.x];
+	    int movX = mov1.x, movY = mov1.y;
+	    for(int loopCnt = 0; loopCnt < 2; loopCnt++){
+	        if(loopCnt == 1){
+	            movX = mov2.x;
+	            movY = mov2.y;
+	        }
+	        //check horizontal
+	        for (int j = movX; j < 19 ; j++) {
+	            if (board[movY][j] == color) count++;
+	            else break;
+	        }
+	        for (int j = movX; j > -1; j--) {
+	            if (board[movY][j] == color) count++;
+	            else break;
+	        }
+	        if (count > 6) return color;
+	        count = 0;
+	        //check ertical 
+	        for (int i = movY; i < 19; i++) {
+	            if (board[i][movX] == color) count++;
+	            else break;
+	        }
+	        for (int i = movY; i > -1 ; i--) {
+	            if (board[i][movX] == color) count++;
+	            else break;
+	        }
+	        if (count > 6) return color;
+	        count = 0;
+	        //check right-up diagonal
+	        for (int i = movY, j = movX; i < 19 && j > -1 ; i++, j--) {
+	            if (board[i][j] == color) count++;
+	            else break;
+	        }
+	        for (int i = movY, j = movX; i > -1 && j < 19 ; i--, j++) {
+	            if (board[i][j] == color) count++;
+	            else break;
+	        }
+	        if (count > 6) return color;
+	        count = 0;
+	        //check left-up diagonal
+	        for (int i = movY, j = movX; i > -1 && j > -1; i--, j--) {
+	            if (board[i][j] == color) count++;
+	            else break;
+	        }
+	        for (int i = movY, j = movX; i < 19 && j < 19 ; i++, j++) {
+	            if (board[i][j] == color) count++;
+	            else break;
+	        }
+	        if (count > 6) return color;
+	        count = 0;
+	    }
+	    return 0;
+	}// end of chkVic()
+	*/
 }
 
 //막힌게 2칸 떨어져있으면 반대편 /4.5 3칸 떨어져있으면 그대
