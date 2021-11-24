@@ -21,7 +21,7 @@ public class cor {
 		this.j=j;
 	}
 	public String toString() {
-		return String.format("i: %02d, j: %02d", this.i, this.j);
+		return String.format("I: %02d, J: %02d ", this.i, this.j);
 	}
 	
 }

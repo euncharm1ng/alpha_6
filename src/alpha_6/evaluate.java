@@ -10,18 +10,16 @@ public class evaluate {
 	static cor move = new cor();
 	final static int LEFTRIGHT = 0, TOPDOWN = 1, TOPLBOTR = 2, BOTLTOPR = 3, OFFENSE = 1, DEFENSE = 2;
 	static boolean DEBUG = false, PRINTINFO = false;
-	final static long[][] scoresArray1 = { { 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 },
-			{ 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, { 3, 6, 11, 20 },
-			{ 97, 387, 704, 1280 }, { 24, 1549, 2816, 5120 }, { 209600, 838400, 3353600, 13414400 },
-			{ 209600, 838400, 3353600, 13414400 }, { 53, 97, 176, 320 }, { 97, 387, 704, 1280 },
-			{ 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000},
-			{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 },
-			{ 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
+	final static long[][] scoresArray1 = { 
+		{ 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 }, { 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, 
+		{ 3, 6, 11, 20 }, { 97, 387, 704, 1280 }, { 24, 1549, 2816, 5120 }, { 209600, 838400, 3353600, 13414400 }, { 209600, 838400, 3353600, 13414400 }, 
+		{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000},
+		{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
 	final static long[][] scoresArray2 = { 
-			{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, 
-			{ 3, 6, 11, 20 },{ 6, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 209600, 838400, 3353600, 13414400 },{ 209600, 838400, 3353600, 13414400 }, 
-			{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 },{ 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000 },
-			{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 },{ 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
+		{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, 
+		{ 3, 6, 11, 20 }, { 6, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 209600, 838400, 3353600, 13414400 }, { 209600, 838400, 3353600, 13414400 }, 
+		{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000 },
+		{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
 
 	public static void 
 	aiTurn(int[][] board, int aiTag, int turn, cor[] logs, int logNum) {
@@ -69,8 +67,10 @@ public class evaluate {
 		outerloop:
 		for(int i = 0; i < WIDTH; i++){
 			placeMove(board, topFirstMoves[i], currTag);
+			System.out.println("\tFIRST MOVE: " + topFirstMoves[i]);
+			printDebug(scoreBoard);
 			if(isWin(board, topFirstMoves[i])){
-				System.out.println("WIN DETECTED move 1" + topFirstMoves[i] + " " + DEPTH);
+				System.out.println("WIN DETECTED MOVE 1" + topFirstMoves[i] + " " + DEPTH);
 				int second = 0;
 				if(i == 0) second = 1;
 				bestFirst.setI(topFirstMoves[i].getI());
@@ -87,6 +87,7 @@ public class evaluate {
 			for(int j = 0; j < WIDTH; j++){
 				currScore = topFirstScore[i] + topSecondScore[j];
 				placeMove(board, topSecondMoves[j], currTag);
+				System.out.println("\t\tSECOND MOVE: " + topSecondMoves[j]);
 				if(isWin(board, topSecondMoves[j])){
 					System.out.println("WIN DETECTED MOVE 2 " + topFirstMoves[i] + topSecondMoves[j] + " " + DEPTH);
 					bestFirst.setI(topFirstMoves[i].getI());
@@ -103,10 +104,10 @@ public class evaluate {
 
 				if(!bestRecorded || currScore > bestScore){ 
 					bestScore = currScore;
-					bestFirst.setI(topFirstMoves[i].getI());// = topFirstMoves[i].i;
-					bestFirst.setJ(topFirstMoves[i].getJ());// = topFirstMoves[i].j;
-					bestSecond.setI(topSecondMoves[j].getI());// = topSecondMoves[i].i;
-					bestSecond.setJ(topSecondMoves[j].getJ());// = topSecondMoves[i].j;
+					bestFirst.setI(topFirstMoves[i].getI());
+					bestFirst.setJ(topFirstMoves[i].getJ());
+					bestSecond.setI(topSecondMoves[j].getI());
+					bestSecond.setJ(topSecondMoves[j].getJ());
 					bestRecorded = true;
 				}
 			}
@@ -187,7 +188,6 @@ public class evaluate {
 	{
 		int count = 0, homeTag = board[move.getI()][move.getJ()];
 		int moveI = move.getI(), moveJ = move.getJ();
-		//System.out.println("ISWIN, home tag: " + homeTag + " " + move);
 		if(homeTag == 0) System.out.println("************SOMETHING VERY WRONG************");
 		//check horizontal
 		for(int j = moveJ; j < 19; j++){
@@ -336,6 +336,7 @@ public class evaluate {
 		System.out.println();
 		return logNum;
 	}
+
 	/*
 	 * read board left to right, top to bottom, left top to right bottom, left
 	 * bottom to right top if there is a stone, hand direction, cor of the beginning
@@ -343,7 +344,6 @@ public class evaluate {
 	 * start from (0,0) except left bottom to right top which starts from (18,0)
 	 * (0,0) being left top corner; (18,0) being left bottom
 	 */
-
 	public static void readBoWDir(int[][] rawData, int[][] scoreBoard, int userTag, int runNumber, int offOrDef,
 			int turn) {
 		int k = 0;
@@ -351,10 +351,8 @@ public class evaluate {
 
 		for (int i = 0; i < 19; i++) { // left right
 			for (int j = 0; j < 19; j++) {
-				// if(rawData[j][i]!=0&&rawData[j][i]!=3) {
 				if (rawData[i][j] == userTag) {
-					move.i = i;
-					move.j = 0;
+					move.i = i; move.j = 0;
 					for (j = 0; j < 19; j++) { oneRow[j] = rawData[i][j]; }
 					evaGiveScoreC1(scoreBoard, oneRow, 19, userTag, move, LEFTRIGHT, runNumber, offOrDef, turn);
 					break;
@@ -364,10 +362,8 @@ public class evaluate {
 
 		for (int i = 0; i < 19; i++) { // top down
 			for (int j = 0; j < 19; j++) {
-				// if(rawData[i][j]!=0&&rawData[i][j]!=3) {
 				if (rawData[j][i] == userTag) {
-					move.i = 0;
-					move.j = i;
+					move.i = 0; move.j = i;
 					for (j = 0; j < 19; j++) { oneRow[j] = rawData[j][i]; }
 					evaGiveScoreC1(scoreBoard, oneRow, 19, userTag, move, TOPDOWN, runNumber, offOrDef, turn);
 					break;
@@ -378,11 +374,8 @@ public class evaluate {
 		for (int i = 0; i < 14; i++) {// top left to right bottom, top left to top right
 			k = i;
 			for (int j = 0; j < 19 - i; j++) {
-				// if(rawData[k][j]!=0&&rawData[k][j]!=3) {
 				if (rawData[k][j] == userTag) {
-					move.i = i;
-					move.j = 0;
-					k = i;
+					move.i = i; move.j = 0; k = i;
 					for (j = 0; j < 19 - i; j++) {
 						oneRow[j] = rawData[k][j];
 						k++;
@@ -396,11 +389,8 @@ public class evaluate {
 		for (int i = 1; i < 14; i++) {// top left to right bottom, left top to left down
 			k = 0;
 			for (int j = i; j < 19; j++) {
-				// if(rawData[k][j]!=0&&rawData[k][j]!=3) {
 				if (rawData[k][j] == userTag) {
-					move.i = 0;
-					move.j = i;
-					k = 0;
+					move.i = 0; move.j = i; k = 0;
 					for (j = i; j < 19; j++) {
 						oneRow[k] = rawData[k][j];
 						k++;
@@ -415,11 +405,8 @@ public class evaluate {
 		for (int i = 18; i > 4; i--) {// top right to left bottom, top right to top left
 			k = i;
 			for (int j = 0; j < i; j++) {
-				// if(rawData[k][j]!=0&&rawData[k][j]!=3) {
 				if (rawData[k][j] == userTag) {
-					move.i = i;
-					move.j = 0;
-					k = i;
+					move.i = i; move.j = 0; k = i;
 					for (j = 0; j < i; j++) {
 						oneRow[j] = rawData[k][j];
 						k--;
@@ -433,18 +420,15 @@ public class evaluate {
 		for (int i = 1; i < 14; i++) {// top right to left bottom, right top to right bottom
 			k = 18;
 			for (int j = i; j < 18; j++) {
-				// if(rawData[k][j]!=0&&rawData[k][j]!=3) {
 				if (rawData[k][j] == userTag) {
-					move.i = 18;
-					move.j = i;
-					k = 18;
+					move.i = 18; move.j = i; k = 18;
 					int pos = 0;
 					for (j = i; j < 18; j++) {
 						oneRow[pos] = rawData[k][j];
 						k--;
 						pos++;
 					}
-					evaGiveScoreC1(scoreBoard, oneRow, 18 - i, userTag, move, BOTLTOPR, runNumber, offOrDef, turn);
+					evaGiveScoreC1(scoreBoard, oneRow, 19 - i, userTag, move, BOTLTOPR, runNumber, offOrDef, turn);
 					break;
 				}
 				k--;
@@ -472,7 +456,6 @@ public class evaluate {
 			}
 			System.out.println();
 		}
-		System.out.println();
 
 		/*
 		 * convert dead area to oppotag
@@ -511,11 +494,13 @@ public class evaluate {
 		 * segment usertag,,
 		 * diagnosis--------------------------------------------------------------
 		 */
-		System.out.print("dummies:");
-		for (int k = 0; k < onerawdatalen; k++) {
-			System.out.print(dummycell[k] + " ");
+		if(DEBUG){
+			System.out.print("dummies:");
+			for (int k = 0; k < onerawdatalen; k++) {
+				System.out.print(dummycell[k] + " ");
+			}
+			System.out.println();
 		}
-		System.out.println();
 		// 만약에 아군 돌들 사이에 장애물이 없다면 시작과 끝은 데려와서 1-1-11의 케이스를 확인할 수 있도록
 		
 		int[] lastCaseInfoList = new int[10];
@@ -563,9 +548,6 @@ public class evaluate {
 		 *  그 점수는 가장 큰 점수를 넣는다. 
 		 *  
 		 */
-		
-		
-	
 		while (pos < onerawdatalen) {
 			int temp;
 			if ((temp = dummycell[pos]) == oppoTag) {
@@ -576,10 +558,9 @@ public class evaluate {
 						lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
 					}
 					
-					System.out.println("blocked directly " + frontGap + " " + count1 + " " + btwGap);
+					if(DEBUG) System.out.println("blocked directly " + frontGap + " " + count1 + " " + btwGap);
 					blocked = true;
-					giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked, backBlocked,
-							runNumber, offOrDef, turn); // blocked
+					giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked, backBlocked, runNumber, offOrDef, turn); // blocked
 					// btwgap
 					// count1 frontgap
 
@@ -602,7 +583,7 @@ public class evaluate {
 //							}
 //							
 							
-							System.out.println("end of line");
+							if(DEBUG) System.out.println("end of line");
 							blocked = true;
 							break;
 						} else if (dummycell[pos + j] == oppoTag) {
@@ -612,7 +593,7 @@ public class evaluate {
 //								lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
 //							}
 							
-							System.out.println("blocked!");
+							if(DEBUG) System.out.println("blocked!");
 							blocked = true;
 							break;
 						} else if (dummycell[pos + j] == userTag) {
@@ -626,16 +607,17 @@ public class evaluate {
 							btwGap++;
 						}
 					}
-					System.out.println("btwgap==" + btwGap);
+					if(DEBUG) System.out.println("btwgap==" + btwGap);
 					if (btwGap == 4) {
 						// (for special case)
 						if(isConnected!= 2) { //2개라면 건드리지 말아야함!
 							isConnected = 0; // connected가 아닌 것이 나올 때는 연속된 connected가 아니기에 0으로 리셋.
 							lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
 						}
-						
-						System.out.println("case isolated " + frontGap + " " + count1);
-						System.out.println("case isolated " + stoStart);
+						if(DEBUG){	
+							System.out.println("case isolated " + frontGap + " " + count1);
+							System.out.println("case isolated " + stoStart);
+						}
 						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked,
 								backBlocked, runNumber, offOrDef, turn);
 						// 여기서도 iso라고 밝히고 점수를 줘야
@@ -645,9 +627,10 @@ public class evaluate {
 							isConnected = 0; // connected가 아닌 것이 나올 때는 연속된 connected가 아니기에 0으로 리셋.
 							lastCaseInfoList = new int[10]; //만약 isConnected가 0이되는 경우라면 array도 초기화를 해줘야한다.
 						}
-						
-						System.out.println("case blocked stoStart " + stoStart);
-						System.out.println("case blocked " + frontGap + " " + count1 + " " + btwGap);
+						if(DEBUG){
+							System.out.println("case blocked stoStart " + stoStart);
+							System.out.println("case blocked " + frontGap + " " + count1 + " " + btwGap);
+						}
 						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked,
 								backBlocked, runNumber, offOrDef, turn);
 						// blocked 밝히고 btwGap이 뒤에 공간이라고 넘기고 계산
@@ -666,7 +649,7 @@ public class evaluate {
 							pos++;
 						}
 						for (int i = 0; i < 2; i++) {
-							if (pos + i > onerawdatalen-1) //여기 -1추가함 11.23 화요일 19:38
+							if (pos + i >= onerawdatalen) //여기 -1추가함 11.23 화요일 19:38
 								break;
 							else if (dummycell[pos + i] == 0)
 								backGap++;
@@ -675,10 +658,11 @@ public class evaluate {
 						}
 
 						pos--;
-						
-						System.out.println(
-								"case connected " + frontGap + " " + count1 + " " + btwGap + " " + count2 + " ");
-						System.out.println("case connected stoStart " + stoStart);
+						if(DEBUG){
+							System.out.println(
+									"case connected " + frontGap + " " + count1 + " " + btwGap + " " + count2 + " ");
+							System.out.println("case connected stoStart " + stoStart);
+						}
 						
 						//(for special case)
 						//isConnected가 1이라는 소리는 connected가 첫번째로 나왔다는 소리. 따라서 [0]에 stoStart를 넣어줘서 어디서 시작인지 넣어둔다.
@@ -700,7 +684,7 @@ public class evaluate {
 							//여기까지 하면 count1_1, btwgap_1, count2_1, btwgap_2, count2_2의 값을 다 더 한 것이라 볼 수 있다.
 							
 							if(confirm_special_sum > 5 && lastCaseInfoList[2] == 1 && lastCaseInfoList[5] == 1) {
-								System.out.println("Last case : 잘 들어감!");
+								if(DEBUG) System.out.println("Last case : 잘 들어감!");
 							}else {
 								/*
 								만약 6이상이 아니거나, btwgap이 각각 1이 아니라면 딱히 필요 없는 값들인것이다. 왜냐하면 X 0 0 0 X 0 0 0 0 X 도 합쳤을 때 
@@ -725,26 +709,20 @@ public class evaluate {
 								lastCaseInfoList[1] = temp_b;
 								lastCaseInfoList[2] = temp_c;
 								lastCaseInfoList[3] = temp_d;
-								System.out.println("여기 확인 하는거임!!!!!!!!!!!!!!!" +lastCaseInfoList[0] + lastCaseInfoList[1] + lastCaseInfoList[2] +lastCaseInfoList[3]);
+								if(DEBUG) System.out.println("여기 확인 하는거임!!!!!!!!!!!!!!!" +lastCaseInfoList[0] + lastCaseInfoList[1] + lastCaseInfoList[2] +lastCaseInfoList[3]);
 								//이렇게 되면 connected는 하나만 있는 것과 동일하므로 isConnected를 1로 바꿔준다.
 								isConnected = 1;
 								
 							}
 						}
-						System.out.print("this is lastCaseInfo:  ");
-						for(int i=0; i<lastCaseInfoList.length; i++) {
-							System.out.print(lastCaseInfoList[i]+" ");
+						if(DEBUG){
+							System.out.print("this is lastCaseInfo:  ");
+							for(int i=0; i<lastCaseInfoList.length; i++) {
+								System.out.print(lastCaseInfoList[i]+" ");
+							}
+							System.out.println();
 						}
-						System.out.println();
-						
-						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked,
-								backBlocked, runNumber, offOrDef, turn);
-						
-						
-						
-						
-					
-						
+						giveScore(one_rawData, frontGap, count1, btwGap, count2, backGap, stoStart, blocked, backBlocked, runNumber, offOrDef, turn);
 						
 						// 여기서 frontgap count1 btwgap count2로 점수를 처리하고 btwgap을 frontgap으로, count2을
 						// count1로 돌리면 그게 다음 돌들의 info가 된다.
@@ -786,12 +764,14 @@ public class evaluate {
 		
 		//for special case
 		// 어디에 무엇이 들어갈지 알았음. 그러면 점수를 넣어보자.
-		System.out.println("!!!!!!!!length!!!!!!" + lastCaseInfoList.length);
-		System.out.print("this is lastCaseInfo:  ");
-		for(int i=0; i<lastCaseInfoList.length; i++) {
-			System.out.print(lastCaseInfoList[i]+" ");
+		if(DEBUG){
+			System.out.println("!!!!!!!!length!!!!!!" + lastCaseInfoList.length);
+			System.out.print("this is lastCaseInfo:  ");
+			for(int i=0; i<lastCaseInfoList.length; i++) {
+				System.out.print(lastCaseInfoList[i]+" ");
+			}
+			System.out.println();
 		}
-		System.out.println();
 		
 		int length_lastCase=0;
 		for(int pl =1; pl < lastCaseInfoList.length; pl++) {
@@ -818,16 +798,15 @@ public class evaluate {
 			one_rawData[lastCaseInfoList[0] + lastCaseInfoList[1] + lastCaseInfoList[2] + lastCaseInfoList[3]] += scoresArray_forSpecial[scoreArrayAdd+4][3];
 			
 		}
-		
-		System.out.print("this is one_rawdata:  ");
-		for(int i=0; i<onerawdatalen; i++) {
-			System.out.print(one_rawData[i]+" ");
+		if(DEBUG){
+			System.out.print("this is one_rawdata:  ");
+			for(int i=0; i<onerawdatalen; i++) {
+				System.out.print(one_rawData[i]+" ");
+			}
+			System.out.println();
 		}
-		System.out.println();
 
-		switch (direction)
-
-		{
+		switch (direction) {
 		case LEFTRIGHT: // left to right
 			for (int i = 0; i < 19; i++) {
 				scoreBoard[move.i][i] += one_rawData[i];// one_rawScore[i];
@@ -859,10 +838,8 @@ public class evaluate {
 		default:
 			break;
 		}// end of switch
-
-		
-
 	}
+
 	public static void printDebug(int[][] scoreBoard) {
 		System.out.println(
 				"||x\\y\t   0    1    2    3    4    5    6    7    8    9    a    1    2    3    4    5    6    7    8");
@@ -950,7 +927,7 @@ public class evaluate {
 				if(count1 >5)
 						count1 = 5; //여기서 count1 + count2 가 5를 넘어가는 경우가 있음 예를 들어 x x x 0 0 O O O일 때 그래서 그냥 5로 맞춰 11.23. 19:55
 				for (int i = 0; i < btwGap; i++) {
-					System.out.println("scor + co " +scoreArrayAdd+ " " + count1);
+					if(DEBUG) System.out.println("scor + co " +scoreArrayAdd+ " " + count1);
 					temp = scoresArray[scoreArrayAdd + count1 - 1][3];
 					if (frontGap < 3 || backBlocked)
 						temp /= 4.5;
@@ -1001,69 +978,8 @@ public class evaluate {
 				overSix=0;
 			}
 		}
-		
 		return overSix; //이걸 받을 때는 overSix가 6보다 클 때 true라고 하면서 6개가 되는지 확인 할 수 있다.
 	}
-	/*
-	int 
-	Mini::chkVic(short** board, Move mov1, Move mov2) 
-	{
-	    int count = 0;
-	    short color = board[mov1.y][mov1.x];
-	    int movX = mov1.x, movY = mov1.y;
-	    for(int loopCnt = 0; loopCnt < 2; loopCnt++){
-	        if(loopCnt == 1){
-	            movX = mov2.x;
-	            movY = mov2.y;
-	        }
-	        //check horizontal
-	        for (int j = movX; j < 19 ; j++) {
-	            if (board[movY][j] == color) count++;
-	            else break;
-	        }
-	        for (int j = movX; j > -1; j--) {
-	            if (board[movY][j] == color) count++;
-	            else break;
-	        }
-	        if (count > 6) return color;
-	        count = 0;
-	        //check ertical 
-	        for (int i = movY; i < 19; i++) {
-	            if (board[i][movX] == color) count++;
-	            else break;
-	        }
-	        for (int i = movY; i > -1 ; i--) {
-	            if (board[i][movX] == color) count++;
-	            else break;
-	        }
-	        if (count > 6) return color;
-	        count = 0;
-	        //check right-up diagonal
-	        for (int i = movY, j = movX; i < 19 && j > -1 ; i++, j--) {
-	            if (board[i][j] == color) count++;
-	            else break;
-	        }
-	        for (int i = movY, j = movX; i > -1 && j < 19 ; i--, j++) {
-	            if (board[i][j] == color) count++;
-	            else break;
-	        }
-	        if (count > 6) return color;
-	        count = 0;
-	        //check left-up diagonal
-	        for (int i = movY, j = movX; i > -1 && j > -1; i--, j--) {
-	            if (board[i][j] == color) count++;
-	            else break;
-	        }
-	        for (int i = movY, j = movX; i < 19 && j < 19 ; i++, j++) {
-	            if (board[i][j] == color) count++;
-	            else break;
-	        }
-	        if (count > 6) return color;
-	        count = 0;
-	    }
-	    return 0;
-	}// end of chkVic()
-	*/
 }
 
 //막힌게 2칸 떨어져있으면 반대편 /4.5 3칸 떨어져있으면 그대
