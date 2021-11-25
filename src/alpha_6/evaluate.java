@@ -10,19 +10,37 @@ public class evaluate {
 	static cor move = new cor();
 	final static int LEFTRIGHT = 0, TOPDOWN = 1, TOPLBOTR = 2, BOTLTOPR = 3, OFFENSE = 1, DEFENSE = 2;
 	static boolean DEBUG = false, PRINTINFO = false;
-	final static long[][] scoresArray1 = { 
-		{ 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 }, { 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, 
-		{ 3, 6, 11, 20 }, { 97, 387, 704, 1280 }, { 24, 1549, 2816, 5120 }, { 209600, 838400, 3353600, 13414400 }, { 209600, 838400, 3353600, 13414400 }, 
-		{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000},
-		{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
-	final static long[][] scoresArray2 = { 
-		{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, 
-		{ 3, 6, 11, 20 }, { 6, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 209600, 838400, 3353600, 13414400 }, { 209600, 838400, 3353600, 13414400 }, 
-		{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000 },
-		{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
+	final static long[][] scoresArray1 = { // turn < 6
+		//{ 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 }, { 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, 
+		{ 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 }, { 0, 0, 16384000, 65536000 }, { 0, 0, 0, 65536000 }, 
+		//{ 3, 6, 11, 20 }, { 97, 387, 704, 1280 }, { 24, 1549, 2816, 5120 }, { 209600, 838400, 3353600, 13414400 }, { 209600, 838400, 3353600, 13414400 }, 
+		{ 3, 6, 11, 20 }, { 97, 387, 704, 1280 }, { 24, 1549, 2816, 5120 }, { 0, 0, 3353600, 13414400 }, { 0, 0, 0, 13414400 }, 
+		//{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 167772160, 335544320, 671088640, 1342177000},
+		{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 0, 0, 0, 1342177000},
+		//{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
+		{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 0, 0, 5242880, 10485760 }, { 0, 0, 0, 10485760 } };
+	final static long[][] scoresArray2 = {  // turn > 6
+		//{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1024000, 4096000, 16384000, 65536000 }, { 1024000, 4096000, 16384000, 65536000 }, 
+		{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 0, 0, 16384000, 65536000 }, { 0, 0, 0, 65536000 }, //stone 1 - offense
+		//{ 3, 6, 11, 20 }, { 6, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 209600, 838400, 3353600, 13414400 }, { 209600, 838400, 3353600, 13414400 }, 
+		{ 3, 6, 11, 20 }, { 6, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 0, 0, 3353600, 13414400 }, { 0, 0, 0, 13414400 },  //stone 1 - defense
+		//{ 3, 6, 11, 20 }, { 6, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 0, 0, 3353600, 13414400 }, { 0, 0, 3353600, 13414400 }, 
+		{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 0, 0, 0, 1342177000 }, //stone 2 - offense
+		//{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 1310720, 2621440, 5242880, 10485760 }, { 1310720, 2621440, 5242880, 10485760 } };
+		{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 0, 0, 5242880, 10485760 }, { 0, 0, 0, 10485760 } }; // stone 2 - defense
 
+	final static long[][] offense1Opening = {{ 13, 24, 44, 80 }, { 6, 97, 176, 320 }, { 1549, 6195, 11264, 20480 }, { 0, 0, 16384000, 65536000 }, { 0, 0, 0, 65536000 }};
+	final static long[][] offense2Opening = {{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 0, 0, 0, 1342177000}};
+	final static long[][] defense1Opening = {{ 3, 6, 11, 20 }, { 97, 387, 704, 1280 }, { 24, 1549, 2816, 5120 }, { 0, 0, 3353600, 13414400 }, { 0, 0, 0, 13414400 }};
+	final static long[][] defense2Opening = {{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 0, 0, 5242880, 10485760 }, { 0, 0, 0, 10485760 }};
+
+	final static long[][] offense1 = {{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 0, 0, 16384000, 65536000 }, { 0, 0, 0, 65536000 }};
+	final static long[][] offense2 = {{ 53, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 387, 24781, 45056, 81920 }, { 3, 6, 11, 20 }, { 0, 0, 0, 1342177000 }};
+	final static long[][] defense1 = {{ 3, 6, 11, 20 }, { 6, 97, 176, 320 }, { 97, 387, 704, 1280 }, { 0, 0, 3353600, 13414400 }, { 0, 0, 0, 13414400 }};
+	final static long[][] defense2 = {{ 13, 24, 44, 80 }, { 24, 1549, 2816, 5120 }, { 1549, 6195, 11264, 20480 }, { 0, 0, 5242880, 10485760 }, { 0, 0, 0, 10485760 }};
 	public static void 
-	aiTurn(int[][] board, int aiTag, int turn, cor[] logs, int logNum) {
+	aiTurn(int[][] board, int aiTag, int turn, cor[] evaluateResult)
+	{
 		System.out.println("----aiturn with tag: " + aiTag);
 		int oppoTag = opponentTag(aiTag);
 		int[][] scoreBoard = new int[19][19];
@@ -32,18 +50,16 @@ public class evaluate {
 		readBoWDir(board, scoreBoard, oppoTag, 1, DEFENSE, turn);
 		// find location with highest point
 		// enter input
-		if (DEBUG)
-			printDebug(scoreBoard);
-		logNum = aiInput(board, scoreBoard, aiTag, logs, logNum);
+		if (DEBUG) printDebug(scoreBoard);
+		aiInput(board, scoreBoard, aiTag, evaluateResult, 0);
 		initializeScoreBoard(scoreBoard);
 
-		if(DEBUG) 
-			System.out.println("-----------------------------------move2------------------------------------------");
+		if(DEBUG) System.out.println("-----------------------------------move2------------------------------------------");
 		readBoWDir(board, scoreBoard, aiTag, 2, OFFENSE, turn);
 		readBoWDir(board, scoreBoard, oppoTag, 2, DEFENSE, turn);
 
 		if (DEBUG) printDebug(scoreBoard);
-		aiInput(board, scoreBoard, aiTag, logs, logNum+1);
+		aiInput(board, scoreBoard, aiTag, evaluateResult, 1);
 	}
 
 	public static void
@@ -61,14 +77,15 @@ public class evaluate {
 			topSecondMoves[i] = new cor();
 		}
 
+		initializeScoreBoard(scoreBoard);
 		readBoWDir(board, scoreBoard, currTag, 1, OFFENSE, turn);
 		readBoWDir(board, scoreBoard, oppoTag, 1, DEFENSE, turn);
 		findTop(scoreBoard, topFirstMoves, topFirstScore);
+		printDebug(scoreBoard);
 		outerloop:
 		for(int i = 0; i < WIDTH; i++){
 			placeMove(board, topFirstMoves[i], currTag);
 			System.out.println("\tFIRST MOVE: " + topFirstMoves[i]);
-			printDebug(scoreBoard);
 			if(isWin(board, topFirstMoves[i])){
 				System.out.println("WIN DETECTED MOVE 1" + topFirstMoves[i] + " " + DEPTH);
 				int second = 0;
@@ -84,6 +101,7 @@ public class evaluate {
 			readBoWDir(board, scoreBoard, currTag, 2, OFFENSE, turn);
 			readBoWDir(board, scoreBoard, oppoTag, 2, DEFENSE, turn);
 			findTop(scoreBoard, topSecondMoves, topSecondScore);
+			printDebug(scoreBoard);
 			for(int j = 0; j < WIDTH; j++){
 				currScore = topFirstScore[i] + topSecondScore[j];
 				placeMove(board, topSecondMoves[j], currTag);
@@ -139,6 +157,7 @@ public class evaluate {
 			topSecondMoves[i] = new cor();
 		}
 
+		initializeScoreBoard(scoreBoard);
 		readBoWDir(board, scoreBoard, currTag, 1, OFFENSE, turn);
 		readBoWDir(board, scoreBoard, oppoTag, 1, DEFENSE, turn);
 		findTop(scoreBoard, topFirstMoves, topFirstScore);
@@ -180,9 +199,10 @@ public class evaluate {
 
 	static void
 	placeMove(int[][] board, cor move, int tag)
-	{
-		board[move.getI()][move.getJ()] = tag;
-	}
+	{ 
+		System.out.println("CHANGING " + board[move.getI()][move.getJ()] + " to " + tag + " at " + move);
+		board[move.getI()][move.getJ()] = tag; }
+
 	static boolean
 	isWin(int[][] board, cor move)
 	{
@@ -305,18 +325,11 @@ public class evaluate {
 		}
 	}
 
-	static int aiInput(int[][] board, int[][] scoreBoard, int aiTag, cor[] logs, int logNum) {
-		// 여기서부터는 점수입력 받은 걸로 입력해야함.
-		// int[][] checkscore = new int[19][19]; //board 복사하기 위한 board.
+	static void
+	aiInput(int[][] board, int[][] scoreBoard, int aiTag, cor[] evaluateResult, int index)
+	{
 		int high_i = 0, high_j = 0;
 		int high_score = 0;
-		/**
-		 * board에서 checkboard로 복사하기
-		 */
-		/*
-		 * for(int i = 0; i< 19; i++) { for(int j = 0; j< 19; j++) { checkscore[i][j] =
-		 * scoreBoard[i][j]; } }
-		 */
 
 		for (int i = 0; i < 19; i++) {
 			for (int j = 0; j < 19; j++) {
@@ -327,14 +340,12 @@ public class evaluate {
 				}
 			}
 		}
-		logs[logNum] = new cor(high_i, high_j);
-		logNum++;
-
+		evaluateResult[index].setI(high_i);
+		evaluateResult[index].setJ(high_j);
 		board[high_i][high_j] = aiTag;
 
 		System.out.println("Input aiTag x" + high_i + ", y" + high_j + ".");
 		System.out.println();
-		return logNum;
 	}
 
 	/*
@@ -344,10 +355,30 @@ public class evaluate {
 	 * start from (0,0) except left bottom to right top which starts from (18,0)
 	 * (0,0) being left top corner; (18,0) being left bottom
 	 */
-	public static void readBoWDir(int[][] rawData, int[][] scoreBoard, int userTag, int runNumber, int offOrDef,
-			int turn) {
+	public static void readBoWDir(int[][] rawData, int[][] scoreBoard, int userTag, int runNumber, int offOrDef, int turn) {
+		long[][] scoreArr;
 		int k = 0;
 		int[] oneRow = new int[19];
+		if(turn < 6){
+            if(runNumber == 1){
+                if(offOrDef == OFFENSE) scoreArr = offense1Opening;
+                else scoreArr = defense1Opening;
+            }
+            else{
+                if(offOrDef == OFFENSE) scoreArr = offense2Opening;
+                else scoreArr = defense2Opening;
+            }
+        }
+        else{
+            if(runNumber == 1){
+                if(offOrDef == OFFENSE) scoreArr = offense1;
+                else scoreArr = defense1;
+            }
+            else{
+                if(offOrDef == OFFENSE) scoreArr = offense2;
+                else scoreArr = defense2;
+            }
+        }
 
 		for (int i = 0; i < 19; i++) { // left right
 			for (int j = 0; j < 19; j++) {
@@ -858,8 +889,9 @@ public class evaluate {
 		else return BLACK;
 	}
 
-	public static void giveScore(long[] one_rawData, int frontGap, int count1, int btwGap, int count2, int backGap,
-			int pos, boolean blocked, boolean backBlocked, int runNumber, int offOrDef, int turn) {
+	public static void 
+	giveScore(long[] one_rawData, int frontGap, int count1, int btwGap, int count2, int backGap, int pos, boolean blocked, boolean backBlocked, int runNumber, int offOrDef, int turn) 
+	{
 		long[][] scoresArray;
 		if (turn < 6)
 			scoresArray = scoresArray1;
@@ -882,9 +914,12 @@ public class evaluate {
 			frontGap = 4;
 		}
 		pos -= frontGap;
-		if (DEBUG)
-			System.out.println("--debug--givascore frontgap: " + scoreArrayAdd + " " + count1);
-		for (int i = 0; i < frontGap; i++) {
+		if (DEBUG) System.out.println("--debug--givascore frontgap: " + scoreArrayAdd + " " + count1);
+
+		//for (int i = frontGap -1; i >= 0; i--) {
+			//temp = scoresArray[scoreArrayAdd + count1 - 1][3-i];
+
+		for(int i = 0; i < frontGap; i++){
 			temp = scoresArray[scoreArrayAdd + count1 - 1][i];
 			if (btwGap < 3 && blocked) {
 				temp /= 4.5;
@@ -906,10 +941,10 @@ public class evaluate {
 				one_rawData[pos + i] = temp;
 				j++;
 			}
-		} else if (count2 == 0) {// case isolated
+		} 
+		else if (count2 == 0) {// case isolated
 			int j = 0;
-			if (DEBUG)
-				System.out.println("--debug--givascore btwgap 1: " + scoreArrayAdd + " " + count1);
+			if (DEBUG) System.out.println("--debug--givascore btwgap 1: " + scoreArrayAdd + " " + count1);
 			for (int i = btwGap - 1; i >= 0; i--) {
 				temp = scoresArray[scoreArrayAdd + count1 - 1][i];
 				if (frontGap < 3)
@@ -918,7 +953,8 @@ public class evaluate {
 				j++;
 			}
 			return;
-		} else if (count2 != 0) {// if not isolated
+		} 
+		else if (count2 != 0) {// if not isolated
 			if (offOrDef == DEFENSE && btwGap <= 2 || runNumber == 1 && btwGap <= 2) { // run1 with gap 2, consider them
 																						// as one, for
 				// defense no need to differentiate

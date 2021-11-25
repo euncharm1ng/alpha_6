@@ -94,21 +94,20 @@ public class board {
 	}
 	
 	public cor parse(String move) {
-		System.out.println("in parse " + move);
+		//System.out.println("in parse " + move);
 		int alphabet = move.charAt(0);
 		int tenth = move.charAt(1);
 		int ones = move.charAt(2);
-		System.out.println(alphabet + " " + tenth + " " + ones);
+		//System.out.println(alphabet + " " + tenth + " " + ones);
 		int y = alphabet - 'A';
 		int x = 19 - ((tenth - '0') * 10 + (ones - '0'));
 		if (y > 7) y--;
-		System.out.println(y + " " + x);
+		//System.out.println(y + " " + x);
 		return new cor(x, y);
 	}
 	
 	public String makeNotation() {
-		System.out.println("make notation " + evaluateResult[0]);
-		System.out.println("make natation " + evaluateResult[1]);
+		System.out.println("make notation " + evaluateResult[0] + evaluateResult[1]);
 		char alpha1 = (char) (evaluateResult[0].getJ() + 'A');
 		if (alpha1 >= 'I') alpha1++;
 		char alpha2 = (char) (evaluateResult[1].getJ() + 'A');
@@ -135,12 +134,14 @@ public class board {
 		
 		printBoard();
 		do {
-			//evaluate.aiTurn(this.board, this.homeTag, this.turn, this.logs, this.logNum);
+			//evaluate.aiTurn(this.board, this.homeTag, this.turn, this.evaluateResult);
 			evaluate.runMinimax(board, homeTag, turn, this.evaluateResult);
+			System.out.println("----------------------------------------------------------------------");
+			printBoard();
+			System.out.println("----------------------------------------------------------------------");
 			enterInput(conSix.drawAndRead(makeNotation()));
 
 			increaseTurn();
-			printBoard();
 		}while(true);
 		
 	}
